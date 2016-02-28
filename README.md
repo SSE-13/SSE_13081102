@@ -1,5 +1,5 @@
 # 自我介绍
->![icon](http://img4.duitang.com/uploads/item/201501/20/20150120180628_Uy5in.jpeg)
+![icon](http://img4.duitang.com/uploads/item/201501/20/20150120180628_Uy5in.jpeg)
 
 ## 基本资料
 * 姓名：**夏静**
