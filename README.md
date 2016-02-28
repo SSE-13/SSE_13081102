@@ -23,7 +23,7 @@
 
 
 ## 文字链接
- 百度：*[baidu首页](http://www.baidu.com)*
+> 百度：*[baidu首页](http://www.baidu.com)*
  
 ## 代码片段
 
@@ -35,4 +35,9 @@ int main()
   return 0;
 }
 ```
+## Game
 
+X | X | O 
+------------ | ------------ | ------------
+O | O | X
+X | O |X
