@@ -1,4 +1,6 @@
 # 自我介绍
+>![icon](http://img4.duitang.com/uploads/item/201501/20/20150120180628_Uy5in.jpeg)
+
 ## 基本资料
 * 姓名：**夏静**
 * 学号：**13081102**
@@ -21,9 +23,10 @@
 
 
 ## 文字链接
- 百度：[baidu首页](http://www.baidu.com)
+ 百度：*[baidu首页](http://www.baidu.com)*
  
 ## 代码片段
+
 ```
 #include<stdio.h>
 int main()
@@ -32,3 +35,4 @@ int main()
   return 0;
 }
 ```
+
