@@ -51,7 +51,7 @@ var game;
         }
         BoyShape.prototype.render = function (context) {
             context.beginPath();
-            context.fillStyle = '#00FFFF';
+            context.fillStyle = '#00FFFF'; //青色
             context.arc(GRID_PIXEL_WIDTH / 2, GRID_PIXEL_HEIGHT / 2, Math.min(GRID_PIXEL_WIDTH, GRID_PIXEL_HEIGHT) / 2 - 5, 0, Math.PI * 2);
             context.fill();
             context.closePath();
@@ -63,18 +63,36 @@ var game;
         __extends(BoyBody, _super);
         function BoyBody() {
             _super.apply(this, arguments);
+            this.width = GRID_PIXEL_WIDTH;
+            this.height = GRID_PIXEL_HEIGHT;
+            this.steps = 1;
         }
         BoyBody.prototype.run = function (grid) {
             grid.setStartNode(0, 0);
+            this.x = grid.startNode.x * this.width; //起始坐标
+            this.y = grid.startNode.y * this.height;
             grid.setEndNode(10, 8);
             var findpath = new astar.AStar();
             findpath.setHeurisitic(findpath.diagonal);
             var result = findpath.findPath(grid);
-            var path = findpath._path;
-            console.log(path);
+            this.path = findpath._path;
+            console.log(this.path);
             console.log(grid.toString());
         };
         BoyBody.prototype.onTicker = function (duringTime) {
+            if (this.steps < this.path.length - 1) {
+                var targetx = this.path[this.steps].x * this.width;
+                var targety = this.path[this.steps].y * this.height;
+                if (this.x < targetx) {
+                    this.x = (this.x + this.vx * duringTime > targetx) ? targetx : (this.x + this.vx * duringTime);
+                } //移动
+                if (this.y < targety) {
+                    this.y = (this.y + this.vy * duringTime > targety) ? targety : (this.y + this.vy * duringTime);
+                }
+                if (this.x == targetx && this.y == targety) {
+                    this.steps += 1;
+                }
+            }
         };
         return BoyBody;
     }(Body));
@@ -88,3 +106,4 @@ var renderCore = new RenderCore();
 renderCore.start([world, boyShape]);
 var ticker = new Ticker();
 ticker.start([body]);
+ticker.onTicker();
