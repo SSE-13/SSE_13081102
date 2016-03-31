@@ -37,13 +37,14 @@ module render {
             var localMatrix = new render.Matrix();
             localMatrix.updateFromDisplayObject(this.x, this.y, this.scaleX, this.scaleY, this.rotation);
 
-            if (!parent) {
-                this.globalMatrix = localMatrix;
+            if (!parent) {//没有父节点
+                this.globalMatrix = localMatrix;//全局等于本地
             }
             else {
                 //TODO:
                 // GLOBAL_MATRIX = PARENT_GLOBAL_MATRIX * LOCAL_MATRIX
-                this.globalMatrix = localMatrix;
+                this.globalMatrix = matrixAppendMatrix(localMatrix,parent.globalMatrix);//子本地乘以父全局
+
             }
 
 
@@ -130,7 +131,21 @@ module render {
     }
 
 
-
+   function matrixAppendMatrix(m1:Matrix,m2:Matrix):Matrix{//矩阵乘法
+        
+     
+        
+        var result = new Matrix();
+        result.a = m1.a*m2.a + m1.b*m2.c;
+        result.b = m1.a*m2.b + m1.b*m2.d;
+        result.c = m2.a*m1.c + m2.c*m1.d;
+        result.d = m2.b*m1.c + m1.d*m2.d;
+        result.tx = m2.a*m1.tx + m2.c*m1.ty + m2.tx;
+        result.ty = m2.b*m1.tx + m2.d*m1.ty + m2.ty; 
+        return result;
+               
+    }
+    
     var imagePool = {};
 
     function loadResource(imageList, callback) {
