@@ -1,6 +1,6 @@
 module game {
 
-
+//忘写Finish Homework 4...重新提交一次...
     const GRID_PIXEL_WIDTH = 50;
 
     const GRID_PIXEL_HEIGHT = 50;
