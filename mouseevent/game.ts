@@ -51,7 +51,8 @@ class HumanBody extends Body {
     
     vx:number = 5;
     r = Math.PI;
-
+    orientation = 1;
+    
     onTicker(duringTime: number) {
         
          this.x = this.x + this.vx*duringTime;//向前移动
@@ -67,10 +68,12 @@ body.y = 200;
 ticker.start([body]);
 
 
-var eventCore = new events.EventCore();
+var eventCore = new events.EventCore();//event.ts
 eventCore.init();
+
 var HeadClicked = false;
 var LegClicked = false;
+
 
 var HitTest = (localPoint:math.Point,displayObject:render.DisplayObject) =>{
     //alert (`点击位置为${localPoint.x},${localPoint.y}`);
@@ -87,11 +90,21 @@ var HitTest = (localPoint:math.Point,displayObject:render.DisplayObject) =>{
 var OnClick = () => {
     //alert("clicked!!");
     //修改 HumanBody 的速度，使其反向移动
+    console.log(body.orientation);
     if(HeadClicked)
-    {
-        body.vx *= -1;
-        body.r *= -1;
-        HeadClicked = false;
+    {        
+        if(body.vx == 0)
+        {
+            body.vx = 5 * body.orientation;
+            body.r = Math.PI * body.orientation;   
+            HeadClicked = false;     
+        }else{
+            body.vx *= -1;
+            body.r *= -1;
+            body.orientation *= -1;
+            console.log('normal'+body.orientation);
+            HeadClicked = false;
+        }
     }
     if(LegClicked)
     {
@@ -100,8 +113,8 @@ var OnClick = () => {
         body.rotation = 0;
         LegClicked = false;
     }
+   
 }
-
 
 eventCore.register(head,HitTest,OnClick);
 
