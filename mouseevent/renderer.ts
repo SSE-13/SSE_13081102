@@ -15,6 +15,8 @@ module render {
 
         x = 0;
         y = 0;
+        width = 0;
+        height = 0;
         scaleX = 1;
         scaleY = 1;
         rotation = 0;
@@ -95,7 +97,7 @@ module render {
 
     export class Bitmap extends DisplayObject {
 
-
+      
         source;
 
         render(context: CanvasRenderingContext2D) {
