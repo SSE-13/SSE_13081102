@@ -113,7 +113,12 @@ module render {
 
 
         source;
-
+        constructor(source:string)
+        {
+            super();
+            this.source=source;
+            
+        }
         render(context: CanvasRenderingContext2D) {
 
             var image = imagePool[this.source];

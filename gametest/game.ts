@@ -5,9 +5,6 @@ module game {
 
     export const GRID_PIXEL_HEIGHT = 50;
 
-    //   const NUM_ROWS = 12;
-    //   const NUM_COLS = 12;
-
 
     export class WorldMap extends render.DisplayObjectContainer {
 
@@ -37,24 +34,39 @@ module game {
         render(context: CanvasRenderingContext2D) {
             context.strokeStyle = '#FF0000';
             context.beginPath();
+            var materials = new game.Material();
             var rows = mapData.length;
             var cols = mapData[0].length;
             for (var i = 0; i < cols; i++) {
                 for (var j = 0; j < rows; j++) {
                     context.rect(i * GRID_PIXEL_WIDTH, j * GRID_PIXEL_HEIGHT, GRID_PIXEL_WIDTH, GRID_PIXEL_HEIGHT);
-                    if (!this.grid.getNode(i, j).walkable) {
-                        context.fillStyle = '#000000';//黑色画笔             
+                    if (!this.grid.getNode(i, j).walkable) {                        
+                        materials.addMaterial(new render.Bitmap("block.jpg"));                       
+                        //context.fillStyle = '#000000';//黑色画笔             
                     } else {
-                        context.fillStyle = '#0000FF';//blue画笔    
+                        switch (mapData[i][j]) {
+                            case 1:
+                                context.fillStyle = '#0000FF';//blue画笔 
+                                context.fillRect(i * GRID_PIXEL_WIDTH, j * GRID_PIXEL_HEIGHT, GRID_PIXEL_WIDTH, GRID_PIXEL_HEIGHT);
+                                context.strokeRect(i * GRID_PIXEL_WIDTH, j * GRID_PIXEL_HEIGHT, GRID_PIXEL_WIDTH, GRID_PIXEL_HEIGHT);
+                                break;
+                            case 2:
+                                var materials = new game.Material();
+                                materials.addMaterial(new render.Bitmap("road.jpg"));
+                                break;
+                            default:
+                                break;
+                        }
                     }
-                    context.fillRect(i * GRID_PIXEL_WIDTH, j * GRID_PIXEL_HEIGHT, GRID_PIXEL_WIDTH, GRID_PIXEL_HEIGHT);
-                    context.strokeRect(i * GRID_PIXEL_WIDTH, j * GRID_PIXEL_HEIGHT, GRID_PIXEL_WIDTH, GRID_PIXEL_HEIGHT);
                 }
             }
+            materials.draw(context);//materials渲染
             context.closePath();
         }
     }
-
+    /*
+    判断点击用
+    */
     export class Tile extends render.Rect {
 
         public ownedRow: number;
@@ -65,15 +77,41 @@ module game {
         }
     }
 
+    export class Material extends render.DisplayObject{
+        materials: Array<render.Bitmap>;
+        constructor() {
+            super();
+            this.materials = [];
+        }
+        public addMaterial(material: render.Bitmap) {
+            this.materials.push(material);
+        }
+         render(context) {
+            for (var i = 0; i < this.materials.length; i++) {
+                var child = this.materials[i];
+                child.draw(context);//画的位置怎么确定？？
+            }
+        }
+        
+
+
+
+    }
 
 
     export class BoyShape extends render.DisplayObject {
         render(context: CanvasRenderingContext2D) {
-            context.beginPath()
+            var human = new render.Bitmap("head.png");
+            human.x=0;
+            human.y=0;
+            var renderCore = new render.RenderCore();
+            renderCore.start(human, ["head.png"]);
+          /*  context.beginPath()
             context.fillStyle = '#00FFFF';//青色
             context.arc(GRID_PIXEL_WIDTH / 2, GRID_PIXEL_HEIGHT / 2, Math.min(GRID_PIXEL_WIDTH, GRID_PIXEL_HEIGHT) / 2 - 5, 0, Math.PI * 2);
             context.fill();
             context.closePath();
+            */
         }
     }
 
@@ -90,7 +128,7 @@ module game {
             }
         */
         public run(grid, x, y) {
-             grid.setStartNode(0, 0);//????
+            grid.setStartNode(0, 0);//????
             this.x = grid.startNode.x * this.width; //起始坐标
             this.y = grid.startNode.y * this.height;
             grid.setEndNode(x, y);
