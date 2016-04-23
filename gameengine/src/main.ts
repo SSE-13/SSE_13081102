@@ -8,6 +8,7 @@ function createMapEditor() {
     for (var col = 0; col < rows; col++) {
         for (var row = 0; row < cols; row++) {
             var tile = new editor.Tile();
+         
             tile.setWalkable(mapData[row][col]);
             tile.x = col * editor.GRID_PIXEL_WIDTH;
             tile.y = row * editor.GRID_PIXEL_HEIGHT
@@ -15,6 +16,11 @@ function createMapEditor() {
             tile.ownedRow = row;
             tile.width = editor.GRID_PIXEL_WIDTH;
             tile.height = editor.GRID_PIXEL_HEIGHT;
+            tile.xposition = tile.x/editor.GRID_PIXEL_WIDTH +1;
+            tile.yposition = tile.y/editor.GRID_PIXEL_HEIGHT +1;
+            tile.xtext = tile.xposition.toString();
+            tile.ytext = tile.yposition.toString();
+            
             world.addChild(tile);
 
 
@@ -25,10 +31,38 @@ function createMapEditor() {
 
 }
 
-
-
+ 
+//  var bt= new render.Rect;
+//             bt.x = 100;
+//             bt.y = 60;
+//             bt.height = 30;
+//             bt.width = 60;
+            // button.onClick = () =>{
+            //     console.log("ss");
+                
+                
+            // }
+            
+var xt= new render.TextField;
+var yt= new render.TextField;
 function onTileClick(tile: editor.Tile) {
     console.log(tile);
+    // console.log(tile.xtext);
+    
+    var walkable = mapData[tile.ownedRow][tile.ownedCol];
+    // if(walkable == 1){
+    //     bt.color="#FF0000";
+    //     console.log("d");
+        
+    // }
+    // else {
+    //     bt.color="#0000FF";
+    // }
+    mapData[tile.ownedRow][tile.ownedCol]=walkable;
+    tile.setWalkable(walkable);
+    tile.walkable = mapData[tile.ownedRow][tile.ownedCol];
+    yt.text= tile.xtext;
+    xt.text= tile.ytext;      
 }
 
 var storage = data.Storage.getInstance();
@@ -41,11 +75,20 @@ var eventCore = events.EventCore.getInstance();
 eventCore.init();
 
 
+
+            
 var mapEditor = createMapEditor();
 var stage = new render.DisplayObjectContainer();
 stage.addChild(mapEditor);
 var panel = new editor.ControlPanel();
 panel.x = 300;
+panel.addChild(xt);
+panel.addChild(yt);
+// panel.addChild(bt);
+xt.x = 60;
+xt.y = 0;
+yt.x = 60;
+yt.y = 30;
 stage.addChild(panel);
-
 renderCore.start(stage);
+

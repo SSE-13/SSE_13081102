@@ -12,14 +12,42 @@ function createMapEditor() {
             tile.ownedRow = row;
             tile.width = editor.GRID_PIXEL_WIDTH;
             tile.height = editor.GRID_PIXEL_HEIGHT;
+            tile.xposition = tile.x / editor.GRID_PIXEL_WIDTH + 1;
+            tile.yposition = tile.y / editor.GRID_PIXEL_HEIGHT + 1;
+            tile.xtext = tile.xposition.toString();
+            tile.ytext = tile.yposition.toString();
             world.addChild(tile);
             eventCore.register(tile, events.displayObjectRectHitTest, onTileClick);
         }
     }
     return world;
 }
+//  var bt= new render.Rect;
+//             bt.x = 100;
+//             bt.y = 60;
+//             bt.height = 30;
+//             bt.width = 60;
+// button.onClick = () =>{
+//     console.log("ss");
+// }
+var xt = new render.TextField;
+var yt = new render.TextField;
 function onTileClick(tile) {
     console.log(tile);
+    // console.log(tile.xtext);
+    var walkable = mapData[tile.ownedRow][tile.ownedCol];
+    // if(walkable == 1){
+    //     bt.color="#FF0000";
+    //     console.log("d");
+    // }
+    // else {
+    //     bt.color="#0000FF";
+    // }
+    mapData[tile.ownedRow][tile.ownedCol] = walkable;
+    tile.setWalkable(walkable);
+    tile.walkable = mapData[tile.ownedRow][tile.ownedCol];
+    yt.text = tile.xtext;
+    xt.text = tile.ytext;
 }
 var storage = data.Storage.getInstance();
 storage.readFile();
@@ -32,5 +60,12 @@ var stage = new render.DisplayObjectContainer();
 stage.addChild(mapEditor);
 var panel = new editor.ControlPanel();
 panel.x = 300;
+panel.addChild(xt);
+panel.addChild(yt);
+// panel.addChild(bt);
+xt.x = 60;
+xt.y = 0;
+yt.x = 60;
+yt.y = 30;
 stage.addChild(panel);
 renderCore.start(stage);

@@ -37,14 +37,60 @@ var editor;
         __extends(ControlPanel, _super);
         function ControlPanel() {
             _super.call(this);
-            var button = new ui.Button();
-            button.text = "Hello";
-            button.width = 100;
-            button.height = 50;
-            this.addChild(button);
+            var hang = new render.TextField;
+            hang.text = "行数：";
+            hang.x = 0;
+            hang.y = 0;
+            this.addChild(hang);
+            var lie = new render.TextField;
+            lie.text = "列数：";
+            lie.x = 0;
+            lie.y = 30;
+            this.addChild(lie);
+            var shifou = new render.TextField;
+            shifou.text = "是否能走：";
+            shifou.x = 0;
+            shifou.y = 60;
+            this.addChild(shifou);
+            var tile = new editor.Tile();
+            var button = new ui.Button;
+            button.x = 100;
+            button.y = 60;
+            button.height = 30;
+            button.width = 60;
+            button.text = " ";
+            console.log("kkk");
+            var i = false;
             button.onClick = function () {
-                alert(111);
             };
+            this.addChild(button);
+            //             var tile = new editor.Tile;
+            //         //    tile.xtext = tile.xposition.toString();
+            //         //    tile.ytext = tile.yposition.toString();
+            //             var xt= new render.TextField;
+            // var yt= new render.TextField;
+            //  yt.text= tile.xtext;
+            //     xt.text= tile.ytext;
+            //     xt.x = 60;
+            // xt.y = 0;
+            // yt.x = 60;
+            // yt.y = 30;
+            // this.addChild(xt);
+            // this.addChild(yt);
+            //         this.addChild(button);
+            //          var walkable = mapData[tile.ownedRow][tile.ownedCol];
+            // // if(walkable == 1){
+            // //     bt.color="#FF0000";
+            // //     console.log("d");
+            // // }
+            // // else {
+            // //     bt.color="#0000FF";
+            // // }
+            // mapData[tile.ownedRow][tile.ownedCol]=walkable;
+            // tile.setWalkable(walkable);
+            // tile.walkable = mapData[tile.ownedRow][tile.ownedCol];
+            // yt.text= tile.xtext;
+            // xt.text= tile.ytext;      
         }
         return ControlPanel;
     }(render.DisplayObjectContainer));
