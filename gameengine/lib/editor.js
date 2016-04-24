@@ -5,8 +5,8 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var editor;
 (function (editor) {
-    editor.GRID_PIXEL_WIDTH = 50;
-    editor.GRID_PIXEL_HEIGHT = 50;
+    editor.GRID_PIXEL_WIDTH = 40;
+    editor.GRID_PIXEL_HEIGHT = 40;
     var WorldMap = (function (_super) {
         __extends(WorldMap, _super);
         function WorldMap() {

@@ -78,7 +78,7 @@ var mapEditor = createMapEditor();
 var stage = new render.DisplayObjectContainer();
 stage.addChild(mapEditor);
 var panel = new editor.ControlPanel();
-panel.x = 300;
+panel.x = 500;
 panel.addChild(xt);
 panel.addChild(yt);
 panel.addChild(bt);

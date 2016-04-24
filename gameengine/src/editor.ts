@@ -2,9 +2,9 @@
 module editor {
 
 
-    export const GRID_PIXEL_WIDTH = 50;
+    export const GRID_PIXEL_WIDTH = 40;
 
-    export const GRID_PIXEL_HEIGHT = 50;
+    export const GRID_PIXEL_HEIGHT = 40;
 
     export class WorldMap extends render.DisplayObjectContainer {
 
