@@ -3,36 +3,31 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/**
- * 基类，负责处理x,y,rotation 等属性
- */
-var DisplayObject = (function () {
-    function DisplayObject() {
+var newDisplayObject = (function () {
+    function newDisplayObject() {
         this.x = 0;
         this.y = 0;
-        this.rotation = 0;
     }
-    DisplayObject.prototype.draw = function (context) {
+    newDisplayObject.prototype.draw = function (context) {
         context.save();
-        context.rotate(this.rotation);
         context.translate(this.x, this.y);
         this.render(context);
         context.restore();
     };
-    DisplayObject.prototype.render = function (context) {
+    newDisplayObject.prototype.render = function (context) {
     };
-    return DisplayObject;
+    return newDisplayObject;
 }());
-var Bitmap = (function (_super) {
-    __extends(Bitmap, _super);
-    function Bitmap() {
+var Map = (function (_super) {
+    __extends(Map, _super);
+    function Map() {
         _super.apply(this, arguments);
     }
-    Bitmap.prototype.render = function (context) {
-        var image = imagePool[bitmap.source];
+    Map.prototype.render = function (context) {
+        var water = imagePool[map_water.source];
         var title = imagePool[bitmap2.source];
         //        if (image && title) {
-        context.drawImage(image, 15, 15, 370, 220);
+        context.drawImage(water, 15, 15, 370, 220);
         context.drawImage(title, 120, 35, 150, 70);
         //       }
         //        else {
@@ -41,7 +36,7 @@ var Bitmap = (function (_super) {
         //            context.fillText('错误的URL', 0, 20);
         //        }
     };
-    return Bitmap;
+    return Map;
 }(DisplayObject));
 function drawQueue(queue) {
     for (var i = 0; i < renderQueue.length; i++) {
@@ -112,7 +107,7 @@ map_box33.source = "TX-box3.3.png";
 var map_box34 = new render.Bitmap();
 map_box34.source = "TX-box3.4.png";
 //渲染队列
-var renderQueue = [rect, bitmap, text, cirl, Cir1, Cir2, Cir3, cxt];
+var renderQueue = [bitmap, bitmap2];
 //资源加载列表
 var imageList = ['TX-ground.png', 'TX-water.png', 'TX-stone.png', 'TX-grass.png', 'TX-wall.png', 'TX-birdge.png',
     'TX-key.png', 'TX-box1.1.png', 'TX-box1.2.png', 'TX-box1.3.png', 'TX-box1.4.png', 'TX-box2.1.png', 'TX-box2.2.png',

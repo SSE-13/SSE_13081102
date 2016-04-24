@@ -1,17 +1,14 @@
-/**
- * 基类，负责处理x,y,rotation 等属性
- */ 
-class DisplayObject {
+
+class newDisplayObject {
 
     x = 0;
 
     y = 0;
 
-    rotation = 0;
 
     draw(context: CanvasRenderingContext2D) {
         context.save();
-        context.rotate(this.rotation);
+
         context.translate(this.x, this.y);
         this.render(context);
 
@@ -24,17 +21,17 @@ class DisplayObject {
 
 }
 
-class Bitmap extends DisplayObject {
+class Map extends DisplayObject {
 
 
     source;
 
     render(context: CanvasRenderingContext2D) {
 
-        var image = imagePool[bitmap.source];
+        var water = imagePool[map_water.source];
         var title = imagePool[bitmap2.source];
 //        if (image && title) {
-            context.drawImage(image, 15, 15, 370, 220);
+            context.drawImage(water, 15, 15, 370, 220);
             context.drawImage(title, 120, 35, 150, 70);
  //       }
 
@@ -143,7 +140,7 @@ var map_box34 = new render.Bitmap();
 map_box34.source = "TX-box3.4.png";
 
 //渲染队列
-var renderQueue = [rect, bitmap, text, cirl, Cir1, Cir2, Cir3, cxt];
+var renderQueue = [bitmap,bitmap2];
 //资源加载列表
 var imageList = ['TX-ground.png','TX-water.png','TX-stone.png','TX-grass.png','TX-wall.png','TX-birdge.png',
 'TX-key.png','TX-box1.1.png','TX-box1.2.png','TX-box1.3.png','TX-box1.4.png','TX-box2.1.png','TX-box2.2.png',
