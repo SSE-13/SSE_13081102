@@ -108,12 +108,10 @@ module editor {
             this.addChild(sucaibutton);
               sucaibutton.onClick = () =>{
                 if(sucaibutton.background.color =="#0000FF"){
-                //  sucaibutton.text="fou"
                     sucaibutton.background.color = "#FF0000"
                              sucaibutton.canwalk = false;
                 }
                 else{
-                //   sucaibutton.text = "shi"
                     sucaibutton.background.color = "#0000FF"
                              sucaibutton.canwalk = true;
                 }
