@@ -38,7 +38,7 @@ module editor {
         public walkable: Boolean;
         public xtext:string;
         public ytext:string;
-        
+       
         constructor() {
             super();
             
@@ -71,28 +71,16 @@ module editor {
             shifou.x = 0;
             shifou.y = 60;
             this.addChild(shifou);
-
-            var butt= new ui.Button;
-            butt.x = 100;
-            butt.y = 60;
-            butt.height = 30;
-            butt.width = 60;
-         //   butt.label.text = "是"
-          this.addChild(butt);
-   
-            butt.onClick = () =>{
-                if(butt.background.color =="#0000FF"){
-                //  butt.text="fou"
-                    butt.background.color = "#FF0000"
-                             butt.canwalk = false;
-                }
-                else{
-                //   butt.text = "shi"
-                    butt.background.color = "#0000FF"
-                             butt.canwalk = true;
-                }
-}
-           
+            
+            // var button = new ui.Button;
+            // button.x=100;
+            // button.y = 60;
+            // button.width = 60;
+            // button.height= 30;
+            // button.onClick = () =>{
+                
+            // }
+            // this.addChild(button);
             
             var sucai = new render.TextField;
             sucai.text="网络素材:"
@@ -105,8 +93,9 @@ module editor {
             sucaibutton.y = 100;
             sucaibutton.height = 30;
             sucaibutton.width = 60;
+
             this.addChild(sucaibutton);
-              sucaibutton.onClick = () =>{
+            sucaibutton.onClick = () =>{
                 if(sucaibutton.background.color =="#0000FF"){
                 //  sucaibutton.text="fou"
                     sucaibutton.background.color = "#FF0000"
@@ -121,4 +110,5 @@ module editor {
         }
         
     }
-
+    }
+}
