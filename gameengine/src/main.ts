@@ -32,11 +32,19 @@ function createMapEditor() {
 var bt= new render.TextField;
             bt.x = 100;
             bt.y = 60;
+            // bt.height = 30;
+            // bt.width = 60;
+            // bt.onClick = () =>{
+            //     console.log("ss");
+                
+                
+            // }
             
 var xt= new render.TextField;
 var yt= new render.TextField;
 function onTileClick(tile: editor.Tile) {
     console.log(tile);
+    // console.log(tile.xtext);
     
     var walkable = mapData[tile.ownedRow][tile.ownedCol];
    if(walkable == 1){
