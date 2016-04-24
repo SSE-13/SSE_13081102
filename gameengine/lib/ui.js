@@ -28,27 +28,6 @@ var ui;
             eventCore.register(this, events.displayObjectRectHitTest, function () {
                 if (_this.onClick()) {
                     _this.onClick();
-                    //     i++;
-                    //     if (i/2==0) {
-                    //         this.background.color = "#FF0000"
-                    //     }
-                    //      else{
-                    //     this.background.color = "#0000FF"
-                    // }
-                    //     console.log(i);
-                    var tile = new editor.Tile();
-                    var button = new ui.Button;
-                    var walkable = mapData[tile.ownedRow][tile.ownedCol];
-                    if (walkable == 1) {
-                        button.background.color = "#FF0000";
-                        console.log("d");
-                    }
-                    else {
-                        button.background.color = "#0000FF";
-                    }
-                    mapData[tile.ownedRow][tile.ownedCol] = walkable;
-                    tile.setWalkable(walkable);
-                    tile.walkable = mapData[tile.ownedRow][tile.ownedCol];
                 }
             });
         }
