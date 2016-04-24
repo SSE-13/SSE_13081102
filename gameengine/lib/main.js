@@ -22,33 +22,48 @@ function createMapEditor() {
     }
     return world;
 }
-var bt = new render.TextField;
-bt.x = 100;
-bt.y = 60;
-// bt.height = 30;
-// bt.width = 60;
-// bt.onClick = () =>{
-//     console.log("ss");
-// }
+var re = new render.Rect;
+re.x = 100;
+re.y = 60;
+re.height = 30;
+re.width = 60;
 var xt = new render.TextField;
 var yt = new render.TextField;
 function onTileClick(tile) {
+    var _this = this;
     console.log(tile);
-    // console.log(tile.xtext);
+    var button = new ui.Button();
+    button.width = 60;
+    button.height = 30;
+    button.x = 100;
+    button.y = 60;
+    button.onClick = function () {
+        if (button.text == "否") {
+            button.text = "是";
+            _this.walkable = 0;
+            button.background.color = "#0000FF";
+        }
+        else {
+            button.text = "否";
+            _this.walkable = 1;
+            button.background.color = "#FF0000";
+        }
+    };
     var walkable = mapData[tile.ownedRow][tile.ownedCol];
     if (walkable == 1) {
-        //   walkable = 0;
-        bt.text = "是";
+        button.text = "是";
+        button.background.color = "#0000FF";
     }
     else {
-        // walkable = 1;
-        bt.text = "否";
+        button.text = "否";
+        button.background.color = "#FF0000";
     }
-    mapData[tile.ownedRow][tile.ownedCol] = walkable;
-    tile.setWalkable(walkable);
-    tile.walkable = mapData[tile.ownedRow][tile.ownedCol];
+    panel.addChild(button);
     yt.text = tile.xtext;
     xt.text = tile.ytext;
+    mapData[tile.ownedRow][tile.ownedCol] = walkable;
+    tile.walkable = mapData[tile.ownedRow][tile.ownedCol];
+    tile.setWalkable(walkable);
 }
 var storage = data.Storage.getInstance();
 storage.readFile();
@@ -63,7 +78,7 @@ var panel = new editor.ControlPanel();
 panel.x = 500;
 panel.addChild(xt);
 panel.addChild(yt);
-panel.addChild(bt);
+panel.addChild(re);
 xt.x = 60;
 xt.y = 0;
 yt.x = 60;

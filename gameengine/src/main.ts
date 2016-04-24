@@ -44,6 +44,7 @@ function onTileClick(tile: editor.Tile) {
     console.log(tile);
     
     
+ 
     var button = new ui.Button();
     button.width = 60;
     button.height = 30;
