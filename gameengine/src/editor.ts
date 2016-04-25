@@ -95,10 +95,12 @@ module editor {
                 var tile = new Tile();
                 if (mapData[x][y] == 1) {
                     this.button.background.color = "#FF0000";
+                    this.button.text = "否";
                     mapData[x][y] = 0;
                 }
                 else {
                     this.button.background.color = "#0000FF";
+                    this.button.text = "是";
                     mapData[x][y] = 1;
                 }
                 tile = mapEditor.children[y * mapData[0].length + x];
