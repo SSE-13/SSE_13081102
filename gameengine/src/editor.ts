@@ -28,7 +28,7 @@ module editor {
     }
 
 
-    export class Tile extends render.Rect {
+    export class Tile extends render.Bitmap {
 
 
         public ownedRow: number;
@@ -38,14 +38,19 @@ module editor {
         public walkable: Boolean;
         public xtext:string;
         public ytext:string;
+        
+        private wall:render.Bitmap;
+        private bridge:render.Bitmap;
        
         constructor() {
             super();
+            //this.wall.source = "TX-birdge.png";
+            //this.bridge.source = "TX-wall.png";
             
         }
 
         public setWalkable(value) {
-            this.color = value ? "#0000FF" : "#FF0000";
+            this.source = value ? "TX-birdge.png" : "TX-wall.png";
         }
     }
     

@@ -26,12 +26,14 @@ var editor;
         __extends(Tile, _super);
         function Tile() {
             _super.call(this);
+            //this.wall.source = "TX-birdge.png";
+            //this.bridge.source = "TX-wall.png";
         }
         Tile.prototype.setWalkable = function (value) {
-            this.color = value ? "#0000FF" : "#FF0000";
+            this.source = value ? "TX-birdge.png" : "TX-wall.png";
         };
         return Tile;
-    }(render.Rect));
+    }(render.Bitmap));
     editor.Tile = Tile;
     var ControlPanel = (function (_super) {
         __extends(ControlPanel, _super);
@@ -73,10 +75,12 @@ var editor;
                 var tile = new Tile();
                 if (mapData[x][y] == 1) {
                     _this.button.background.color = "#FF0000";
+                    _this.button.text = "否";
                     mapData[x][y] = 0;
                 }
                 else {
                     _this.button.background.color = "#0000FF";
+                    _this.button.text = "是";
                     mapData[x][y] = 1;
                 }
                 tile = mapEditor.children[y * mapData[0].length + x];
