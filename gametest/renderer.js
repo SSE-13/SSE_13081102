@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var canvas = document.getElementById("game");
+var canvas = document.getElementById("main");
 var context = canvas.getContext("2d");
 var render;
 (function (render) {
@@ -86,8 +86,9 @@ var render;
     render.DisplayObjectContainer = DisplayObjectContainer;
     var Bitmap = (function (_super) {
         __extends(Bitmap, _super);
-        function Bitmap() {
-            _super.apply(this, arguments);
+        function Bitmap(source) {
+            _super.call(this);
+            this.source = source;
         }
         Bitmap.prototype.render = function (context) {
             var image = imagePool[this.source];

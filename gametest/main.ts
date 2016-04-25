@@ -1,16 +1,22 @@
 
 
-function createMap() {
-  //  var world = new editor.WorldMap();
-  //  var rows = mapData.length;
-  //  var cols = mapData[0].length;   
-    var tile = new game.WorldMap(mapData);
-    var rows = mapData.length;
-    var cols = mapData[0].length;
-    for (var col = 0; col < rows; col++) {
-        for (var row = 0; row < cols; row++) {
-            var _tile = new game.Tile();
-   //         tile.setWalkable(mapData[row][col]);
+function createMap(pMapData) {
+    //  var world = new editor.WorldMap();
+    //  var rows = mapData.length;
+    //  var cols = mapData[0].length;   
+    var tile = new game.WorldMap(pMapData);
+    var rows = pMapData.length;
+    var cols = pMapData[0].length;
+    for (var col = 0; col < cols; col++) {
+        for (var row = 0; row < rows; row++) {
+            var _tile;
+             if(tile.grid.getWalkable(col,row))
+            {
+                  _tile = new game.Tile("road.jpg");
+
+            }else{
+                 _tile = new game.Tile("block.jpg");
+            }       
             _tile.x = col * game.GRID_PIXEL_WIDTH;
             _tile.y = row * game.GRID_PIXEL_HEIGHT
             _tile.ownedCol = col;
@@ -18,7 +24,7 @@ function createMap() {
             _tile.width = game.GRID_PIXEL_WIDTH;
             _tile.height = game.GRID_PIXEL_HEIGHT;
             tile.addChild(_tile);
-            
+
             eventCore.register(_tile, events.displayObjectRectHitTest, onTileClick);
         }
     }
@@ -26,13 +32,10 @@ function createMap() {
 }
 
 function onTileClick(tile: game.Tile) {
-    body.run(map.grid,tile.ownedRow,tile.ownedCol);
-    console.log(tile);
-}
+        console.log(tile);
+    body.run(map.grid, tile.ownedRow, tile.ownedCol);
 
-var storage = data.Storage.getInstance();
-storage.createXMLHttpRequest();
-var mapData = storage.mapData;
+}
 
 
 var renderCore = new render.RenderCore();
@@ -40,19 +43,29 @@ var eventCore = events.EventCore.getInstance();
 eventCore.init();
 
 
-var map = createMap();
-
 var boyShape = new game.BoyShape();
-var body = new game.BoyBody(boyShape);
+var body = new game.BoyBehaviour(boyShape);
+
+//var ticker = new Ticker();
 
 var ticker = new Ticker();
-ticker.start([body]);
-ticker.onTicker(); 
 
 var stage = new render.DisplayObjectContainer();
-stage.addChild(map);
-var panel = new editor.ControlPanel();
-panel.x = 300;
-stage.addChild(panel);
 
-renderCore.start(stage);
+var map:game.WorldMap;
+
+var storage = data.Storage.getInstance();
+var onLoadMapDataSuccess = () => {
+    
+    map = createMap(storage.mapData);
+    stage.addChild(map);
+    stage.addChild(boyShape);
+    ticker.start([body]);
+    ticker.onTicker();
+    renderCore.start(stage,["block.jpg","head.png","road.jpg"]);
+
+
+};
+storage.createXMLHttpRequest(onLoadMapDataSuccess);
+
+

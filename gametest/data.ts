@@ -13,27 +13,29 @@ module data {
             return Storage._instance;
         }
 
-        public createXMLHttpRequest() {
+        public createXMLHttpRequest(callback) {
             var xmlHttp;
             xmlHttp = new XMLHttpRequest();
             try {
-        //        xmlHttp.onreadystatechange = handleStateChange;
-                xmlHttp.open("GET", "Json.txt", true);
+                xmlHttp.open("GET", "json.txt", true);
                 xmlHttp.send(null);
             }
             catch (exception) {
                 alert("xmlHttp Fail");
             }
-            if (xmlHttp.readyState == 4) {
-                if (xmlHttp.status == 200 || xmlHttp.status == 0) {
+            
+            xmlHttp.onload = ()=> {
+                   if (xmlHttp.status == 200 || xmlHttp.status == 0) {
                     var result = xmlHttp.responseText;
-                    var json = eval("(" + result + ")");
-                    this.mapData = json;
-                    alert(json.programmers[0].firstName);//读取json数据
-                    //alert(json.sex);
-                }
-            }
+                  //  alert(result);   
+                    var mapData = JSON.parse(result);
+                    this.mapData = mapData.map; 
+                  //  alert(mapData.map);      
+                    callback();
 
+                }
+                
+            }
         }
         /*    public readFile() {
            var map_path = __dirname + "/map.json"

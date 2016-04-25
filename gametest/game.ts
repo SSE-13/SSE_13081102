@@ -12,9 +12,11 @@ module game {
         public isDirty = true;
 
         public grid: astar.Grid;
+        private mapData;
         //  public _tile:game.Tile;
         constructor(mapData) {
             super();
+            this.mapData = mapData;
             this.cache = document.createElement("canvas");
             this.cache.width = 400;
             this.cache.height = 400;
@@ -24,7 +26,8 @@ module game {
             this.grid = grid;
             for (var i = 0; i < rows; i++) {
                 for (var j = 0; j < cols; j++) {
-                    grid.setWalkable(i, j, mapData[i][j]);
+                    var value = mapData[i][j]
+                    grid.setWalkable(j, i, value == 0 ? false : true);//0->不可走，0->可走
 
                 }
             }
@@ -32,52 +35,23 @@ module game {
         }
 
         render(context: CanvasRenderingContext2D) {
-            context.strokeStyle = '#FF0000';
-            context.beginPath();
-            var materials = new game.Material();
-            var rows = mapData.length;
-            var cols = mapData[0].length;
-            for (var i = 0; i < cols; i++) {
-                for (var j = 0; j < rows; j++) {
-                    context.rect(i * GRID_PIXEL_WIDTH, j * GRID_PIXEL_HEIGHT, GRID_PIXEL_WIDTH, GRID_PIXEL_HEIGHT);
-                    if (!this.grid.getNode(i, j).walkable) {                        
-                        materials.addMaterial(new render.Bitmap("block.jpg"));                       
-                        //context.fillStyle = '#000000';//黑色画笔             
-                    } else {
-                        switch (mapData[i][j]) {
-                            case 1:
-                                context.fillStyle = '#0000FF';//blue画笔 
-                                context.fillRect(i * GRID_PIXEL_WIDTH, j * GRID_PIXEL_HEIGHT, GRID_PIXEL_WIDTH, GRID_PIXEL_HEIGHT);
-                                context.strokeRect(i * GRID_PIXEL_WIDTH, j * GRID_PIXEL_HEIGHT, GRID_PIXEL_WIDTH, GRID_PIXEL_HEIGHT);
-                                break;
-                            case 2:
-                                var materials = new game.Material();
-                                materials.addMaterial(new render.Bitmap("road.jpg"));
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                }
-            }
-            materials.draw(context);//materials渲染
-            context.closePath();
+            super.render(context);
         }
     }
     /*
     判断点击用
     */
-    export class Tile extends render.Rect {
+    export class Tile extends render.Bitmap {
 
         public ownedRow: number;
         public ownedCol: number;
 
-        constructor() {
-            super();
+        constructor(source: string) {
+            super(source);
         }
     }
 
-    export class Material extends render.DisplayObject{
+    export class Material extends render.DisplayObject {
         materials: Array<render.Bitmap>;
         constructor() {
             super();
@@ -86,91 +60,115 @@ module game {
         public addMaterial(material: render.Bitmap) {
             this.materials.push(material);
         }
-         render(context) {
+        render(context) {
             for (var i = 0; i < this.materials.length; i++) {
                 var child = this.materials[i];
                 child.draw(context);//画的位置怎么确定？？
             }
         }
-        
+
 
 
 
     }
 
+    /**
+     *人物外观
+     */
+    export class BoyShape extends render.DisplayObjectContainer {
 
-    export class BoyShape extends render.DisplayObject {
-        render(context: CanvasRenderingContext2D) {
-            var human = new render.Bitmap("head.png");
-            human.x=0;
-            human.y=0;
-            var renderCore = new render.RenderCore();
-            renderCore.start(human, ["head.png"]);
-          /*  context.beginPath()
-            context.fillStyle = '#00FFFF';//青色
-            context.arc(GRID_PIXEL_WIDTH / 2, GRID_PIXEL_HEIGHT / 2, Math.min(GRID_PIXEL_WIDTH, GRID_PIXEL_HEIGHT) / 2 - 5, 0, Math.PI * 2);
-            context.fill();
-            context.closePath();
-            */
+        constructor() {
+            super();
+            var head = new render.Bitmap("head.png");
+            head.x = 0;
+            head.y = 0;
+            this.addChild(head);
         }
-    }
 
-    export class BoyBody extends Body {
-        width = GRID_PIXEL_WIDTH;
-        height = GRID_PIXEL_HEIGHT;
+    }
+    /**
+     * 人物行为
+     */
+    export class BoyBehaviour extends Body {
+        width = game.GRID_PIXEL_WIDTH;
+        height = game.GRID_PIXEL_HEIGHT;
         steps = 1;
         path;
-        //?????构造函数怎么写！！？？设置移动起点？？
-        /*    constructor(){
-                super();
-                grid.setStartNode(0, 0);
-                
+        private startX = 0;
+        private startY = 0;
+
+        
+
+        public run(grid: astar.Grid, row, col) {
+            if (grid.getWalkable(col, row)) {
+                grid.setStartNode(this.startX, this.startY);
+                grid.setEndNode(col, row);
+                var findpath = new astar.AStar();
+                findpath.setHeurisitic(findpath.diagonal);
+                var result = findpath.findPath(grid);//A*里面的方法，传入起点和终点
+                this.path = findpath._path;
+                console.log(this.path)
+                if (this.path != null) {
+                    this.startX = col;//网格的坐标和数组的坐标相反
+                    this.startY = row;
+                }
+
+            } else {
+                console.log(grid.getWalkable(col, row));
+                console.log("此处不可走");
             }
-        */
-        public run(grid, x, y) {
-            grid.setStartNode(0, 0);//????
-            this.x = grid.startNode.x * this.width; //起始坐标
-            this.y = grid.startNode.y * this.height;
-            grid.setEndNode(x, y);
-            var findpath = new astar.AStar();
-            findpath.setHeurisitic(findpath.diagonal);
-            var result = findpath.findPath(grid);
-            this.path = findpath._path;
-            console.log(this.path);
-            console.log(grid.toString());
+            
+            //console.log(result);
+            //console.log(this.path.length);
+            // grid.setStartNode(0, 0);//????
+            // this.x = grid.startNode.x * this.width; //起始坐标
+            // this.y = grid.startNode.y * this.height;
+            // grid.setEndNode(x, y);
+            // var findpath = new astar.AStar();
+            // findpath.setHeurisitic(findpath.diagonal);
+            // var result = findpath.findPath(grid);
+            // this.path = findpath._path;
+            // console.log(this.path);
+            // console.log(grid.toString());
         }
 
         public onTicker(duringTime) {
-            if (this.steps < this.path.length - 1) {
-                var targetx = this.path[this.steps].x * this.width;
-                var targety = this.path[this.steps].y * this.height;
-                if (this.x < targetx) {
-                    this.x = (this.x + this.vx * duringTime > targetx) ? targetx : (this.x + this.vx * duringTime);
-                }//移动
-                if (this.y < targety) {
-                    this.y = (this.y + this.vy * duringTime > targety) ? targety : (this.y + this.vy * duringTime);
-                }
-                if (this.x == targetx && this.y == targety) {
-                    this.steps += 1;
+
+
+            if (this.path != null) {
+               // console.log("onTicker");
+              //  console.log(this.path);
+               // console.log(this.steps);
+               // console.log(this.path.length);
+                if (this.steps < this.path.length) {
+                    var targetNode = this.path[this.steps];
+                    var targetx = targetNode.x * this.width;
+                    var targety = targetNode.y * this.height;  
+                   
+                    if (this.x < targetx) {
+                        this.x = (this.x + this.vx * duringTime > targetx) ? targetx : (this.x + this.vx * duringTime);
+                    }//移动
+                    if (this.x > targetx) {
+                        this.x = (this.x - this.vx * duringTime < targetx) ? targetx : (this.x - this.vx * duringTime);
+                    }
+                    if (this.y < targety) {
+                        this.y = (this.y + this.vy * duringTime > targety) ? targety : (this.y + this.vy * duringTime);
+                    }
+                    if (this.y > targety) {
+                        this.y = (this.y - this.vy * duringTime < targety) ? targety : (this.y - this.vy * duringTime);
+                    }
+                    if (this.x == targetx && this.y == targety) {
+                        if (this.steps == this.path.length-1) {
+                            this.steps = 1;
+                            this.path = null;
+                        } else {
+                            this.steps += 1;
+                        }
+                    }
                 }
             }
+
         }
     }
 }
 
-
-
-
-
-var boyShape = new game.BoyShape();
-var world = new game.WorldMap(mapData);
-var body = new game.BoyBody(boyShape);
-//body.run(world.grid);
-
-
-var renderCore = new render.RenderCore();
-//renderCore.start([world, boyShape]);
-
-var ticker = new Ticker();
-ticker.start([body]);
-ticker.onTicker(); 

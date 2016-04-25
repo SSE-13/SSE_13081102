@@ -44,6 +44,9 @@ var astar;
         Grid.prototype.setWalkable = function (x, y, value) {
             this._nodes[x][y].walkable = value;
         };
+        Grid.prototype.getWalkable = function (x, y) {
+            return this._nodes[x][y].walkable;
+        };
         Object.defineProperty(Grid.prototype, "startNode", {
             get: function () {
                 return this._startNode;

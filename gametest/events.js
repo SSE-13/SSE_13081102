@@ -31,7 +31,7 @@ var events;
         };
         EventCore.prototype.init = function () {
             this.eventInfos = [];
-            var canvas = document.getElementById("game");
+            var canvas = document.getElementById("main");
             canvas.addEventListener("click", this.onStageClick);
         };
         EventCore.prototype.register = function (displayObject, hitTest, onClick) {

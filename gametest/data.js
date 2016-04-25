@@ -10,25 +10,27 @@ var data;
             }
             return Storage._instance;
         };
-        Storage.prototype.createXMLHttpRequest = function () {
+        Storage.prototype.createXMLHttpRequest = function (callback) {
+            var _this = this;
             var xmlHttp;
             xmlHttp = new XMLHttpRequest();
             try {
-                //        xmlHttp.onreadystatechange = handleStateChange;
-                xmlHttp.open("GET", "Json.txt", true);
+                xmlHttp.open("GET", "json.txt", true);
                 xmlHttp.send(null);
             }
             catch (exception) {
                 alert("xmlHttp Fail");
             }
-            if (xmlHttp.readyState == 4) {
+            xmlHttp.onload = function () {
                 if (xmlHttp.status == 200 || xmlHttp.status == 0) {
                     var result = xmlHttp.responseText;
-                    var json = eval("(" + result + ")");
-                    this.mapData = json;
-                    alert(json.programmers[0].firstName); //读取json数据
+                    //  alert(result);   
+                    var mapData = JSON.parse(result);
+                    _this.mapData = mapData.map;
+                    //  alert(mapData.map);      
+                    callback();
                 }
-            }
+            };
         };
         return Storage;
     }());

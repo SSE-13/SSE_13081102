@@ -7,14 +7,13 @@ var game;
 (function (game) {
     game.GRID_PIXEL_WIDTH = 50;
     game.GRID_PIXEL_HEIGHT = 50;
-    //   const NUM_ROWS = 12;
-    //   const NUM_COLS = 12;
     var WorldMap = (function (_super) {
         __extends(WorldMap, _super);
         //  public _tile:game.Tile;
         function WorldMap(mapData) {
             _super.call(this);
             this.isDirty = true;
+            this.mapData = mapData;
             this.cache = document.createElement("canvas");
             this.cache.width = 400;
             this.cache.height = 400;
@@ -24,109 +23,141 @@ var game;
             this.grid = grid;
             for (var i = 0; i < rows; i++) {
                 for (var j = 0; j < cols; j++) {
-                    grid.setWalkable(i, j, mapData[i][j]);
+                    var value = mapData[i][j];
+                    grid.setWalkable(j, i, value == 0 ? false : true); //0->不可走，0->可走
                 }
             }
             //       grid.setWalkable(5, 0, false);
         }
         WorldMap.prototype.render = function (context) {
-            context.strokeStyle = '#FF0000';
-            context.beginPath();
-            var rows = mapData.length;
-            var cols = mapData[0].length;
-            for (var i = 0; i < cols; i++) {
-                for (var j = 0; j < rows; j++) {
-                    context.rect(i * game.GRID_PIXEL_WIDTH, j * game.GRID_PIXEL_HEIGHT, game.GRID_PIXEL_WIDTH, game.GRID_PIXEL_HEIGHT);
-                    if (!this.grid.getNode(i, j).walkable) {
-                        context.fillStyle = '#000000'; //黑色画笔             
-                    }
-                    else {
-                        context.fillStyle = '#0000FF'; //blue画笔    
-                    }
-                    context.fillRect(i * game.GRID_PIXEL_WIDTH, j * game.GRID_PIXEL_HEIGHT, game.GRID_PIXEL_WIDTH, game.GRID_PIXEL_HEIGHT);
-                    context.strokeRect(i * game.GRID_PIXEL_WIDTH, j * game.GRID_PIXEL_HEIGHT, game.GRID_PIXEL_WIDTH, game.GRID_PIXEL_HEIGHT);
-                }
-            }
-            context.closePath();
+            _super.prototype.render.call(this, context);
         };
         return WorldMap;
     }(render.DisplayObjectContainer));
     game.WorldMap = WorldMap;
+    /*
+    判断点击用
+    */
     var Tile = (function (_super) {
         __extends(Tile, _super);
-        function Tile() {
-            _super.call(this);
+        function Tile(source) {
+            _super.call(this, source);
         }
         return Tile;
-    }(render.Rect));
+    }(render.Bitmap));
     game.Tile = Tile;
+    var Material = (function (_super) {
+        __extends(Material, _super);
+        function Material() {
+            _super.call(this);
+            this.materials = [];
+        }
+        Material.prototype.addMaterial = function (material) {
+            this.materials.push(material);
+        };
+        Material.prototype.render = function (context) {
+            for (var i = 0; i < this.materials.length; i++) {
+                var child = this.materials[i];
+                child.draw(context); //画的位置怎么确定？？
+            }
+        };
+        return Material;
+    }(render.DisplayObject));
+    game.Material = Material;
+    /**
+     *人物外观
+     */
     var BoyShape = (function (_super) {
         __extends(BoyShape, _super);
         function BoyShape() {
-            _super.apply(this, arguments);
+            _super.call(this);
+            var head = new render.Bitmap("head.png");
+            head.x = 0;
+            head.y = 0;
+            this.addChild(head);
         }
-        BoyShape.prototype.render = function (context) {
-            context.beginPath();
-            context.fillStyle = '#00FFFF'; //青色
-            context.arc(game.GRID_PIXEL_WIDTH / 2, game.GRID_PIXEL_HEIGHT / 2, Math.min(game.GRID_PIXEL_WIDTH, game.GRID_PIXEL_HEIGHT) / 2 - 5, 0, Math.PI * 2);
-            context.fill();
-            context.closePath();
-        };
         return BoyShape;
-    }(render.DisplayObject));
+    }(render.DisplayObjectContainer));
     game.BoyShape = BoyShape;
-    var BoyBody = (function (_super) {
-        __extends(BoyBody, _super);
-        function BoyBody() {
+    /**
+     * 人物行为
+     */
+    var BoyBehaviour = (function (_super) {
+        __extends(BoyBehaviour, _super);
+        function BoyBehaviour() {
             _super.apply(this, arguments);
             this.width = game.GRID_PIXEL_WIDTH;
             this.height = game.GRID_PIXEL_HEIGHT;
             this.steps = 1;
+            this.startX = 0;
+            this.startY = 0;
         }
-        //?????构造函数怎么写！！？？设置移动起点？？
-        /*    constructor(){
-                super();
-                grid.setStartNode(0, 0);
-                
-            }
-        */
-        BoyBody.prototype.run = function (grid, x, y) {
-            grid.setStartNode(0, 0); //????
-            this.x = grid.startNode.x * this.width; //起始坐标
-            this.y = grid.startNode.y * this.height;
-            grid.setEndNode(x, y);
-            var findpath = new astar.AStar();
-            findpath.setHeurisitic(findpath.diagonal);
-            var result = findpath.findPath(grid);
-            this.path = findpath._path;
-            console.log(this.path);
-            console.log(grid.toString());
-        };
-        BoyBody.prototype.onTicker = function (duringTime) {
-            if (this.steps < this.path.length - 1) {
-                var targetx = this.path[this.steps].x * this.width;
-                var targety = this.path[this.steps].y * this.height;
-                if (this.x < targetx) {
-                    this.x = (this.x + this.vx * duringTime > targetx) ? targetx : (this.x + this.vx * duringTime);
-                } //移动
-                if (this.y < targety) {
-                    this.y = (this.y + this.vy * duringTime > targety) ? targety : (this.y + this.vy * duringTime);
-                }
-                if (this.x == targetx && this.y == targety) {
-                    this.steps += 1;
+        BoyBehaviour.prototype.run = function (grid, row, col) {
+            if (grid.getWalkable(col, row)) {
+                grid.setStartNode(this.startX, this.startY);
+                grid.setEndNode(col, row);
+                var findpath = new astar.AStar();
+                findpath.setHeurisitic(findpath.diagonal);
+                var result = findpath.findPath(grid); //A*里面的方法，传入起点和终点
+                this.path = findpath._path;
+                console.log(this.path);
+                if (this.path != null) {
+                    this.startX = col; //网格的坐标和数组的坐标相反
+                    this.startY = row;
                 }
             }
+            else {
+                console.log(grid.getWalkable(col, row));
+                console.log("此处不可走");
+            }
+            //console.log(result);
+            //console.log(this.path.length);
+            // grid.setStartNode(0, 0);//????
+            // this.x = grid.startNode.x * this.width; //起始坐标
+            // this.y = grid.startNode.y * this.height;
+            // grid.setEndNode(x, y);
+            // var findpath = new astar.AStar();
+            // findpath.setHeurisitic(findpath.diagonal);
+            // var result = findpath.findPath(grid);
+            // this.path = findpath._path;
+            // console.log(this.path);
+            // console.log(grid.toString());
         };
-        return BoyBody;
+        BoyBehaviour.prototype.onTicker = function (duringTime) {
+            if (this.path != null) {
+                // console.log("onTicker");
+                //  console.log(this.path);
+                // console.log(this.steps);
+                // console.log(this.path.length);
+                if (this.steps < this.path.length) {
+                    var targetNode = this.path[this.steps];
+                    var targetx = targetNode.x * this.width;
+                    var targety = targetNode.y * this.height;
+                    if (this.x < targetx) {
+                        this.x = (this.x + this.vx * duringTime > targetx) ? targetx : (this.x + this.vx * duringTime);
+                    } //移动
+                    if (this.x > targetx) {
+                        this.x = (this.x - this.vx * duringTime < targetx) ? targetx : (this.x - this.vx * duringTime);
+                    }
+                    if (this.y < targety) {
+                        this.y = (this.y + this.vy * duringTime > targety) ? targety : (this.y + this.vy * duringTime);
+                    }
+                    if (this.y > targety) {
+                        this.y = (this.y - this.vy * duringTime < targety) ? targety : (this.y - this.vy * duringTime);
+                    }
+                    if (this.x == targetx && this.y == targety) {
+                        if (this.steps == this.path.length - 1) {
+                            this.steps = 1;
+                            this.path = null;
+                        }
+                        else {
+                            this.steps += 1;
+                        }
+                    }
+                }
+            }
+        };
+        return BoyBehaviour;
     }(Body));
-    game.BoyBody = BoyBody;
+    game.BoyBehaviour = BoyBehaviour;
 })(game || (game = {}));
-var boyShape = new game.BoyShape();
-var world = new game.WorldMap(mapData);
-var body = new game.BoyBody(boyShape);
-//body.run(world.grid);
-var renderCore = new render.RenderCore();
-//renderCore.start([world, boyShape]);
-var ticker = new Ticker();
-ticker.start([body]);
-ticker.onTicker();

@@ -65,6 +65,9 @@ module astar {
         public setWalkable(x, y, value): void {
             this._nodes[x][y].walkable = value;
         }
+        public getWalkable(x,y): Boolean {
+            return this._nodes[x][y].walkable;
+        }
 
         public get startNode(): Node {
             return this._startNode;

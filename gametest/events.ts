@@ -58,7 +58,7 @@ module events {
 
         init() {
             this.eventInfos = [];
-            var canvas = document.getElementById("game");
+            var canvas = document.getElementById("main");
             canvas.addEventListener("click", this.onStageClick);
         }
 
