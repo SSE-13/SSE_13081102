@@ -37,7 +37,7 @@ module ui {
         public label: render.TextField;
         public _text: string = " ";
 
-public canwalk:boolean;
+//public canwalk:boolean;
 
         constructor() {
 

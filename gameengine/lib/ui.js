@@ -8,6 +8,7 @@ var ui;
     var eventCore = events.EventCore.getInstance();
     var Button = (function (_super) {
         __extends(Button, _super);
+        //public canwalk:boolean;
         function Button() {
             var _this = this;
             _super.call(this);

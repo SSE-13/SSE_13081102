@@ -35,7 +35,8 @@ var editor;
     editor.Tile = Tile;
     var ControlPanel = (function (_super) {
         __extends(ControlPanel, _super);
-        function ControlPanel() {
+        function ControlPanel(mapData, mapEditor) {
+            var _this = this;
             _super.call(this);
             var hang = new render.TextField;
             hang.text = "行数：";
@@ -52,14 +53,35 @@ var editor;
             shifou.x = 0;
             shifou.y = 60;
             this.addChild(shifou);
-            // var button = new ui.Button;
-            // button.x=100;
-            // button.y = 60;
-            // button.width = 60;
-            // button.height= 30;
-            // button.onClick = () =>{
-            // }
-            // this.addChild(button);
+            this.xt = new render.TextField;
+            this.yt = new render.TextField;
+            this.xt.x = 60;
+            this.xt.y = 0;
+            this.yt.x = 60;
+            this.yt.y = 30;
+            this.addChild(this.xt);
+            this.addChild(this.yt);
+            this.button = new ui.Button();
+            this.button.width = 60;
+            this.button.height = 30;
+            this.button.x = 100;
+            this.button.y = 60;
+            this.addChild(this.button);
+            this.button.onClick = function () {
+                var x = parseInt(_this.xt.text) - 1;
+                var y = parseInt(_this.yt.text) - 1;
+                var tile = new Tile();
+                if (mapData[x][y] == 1) {
+                    _this.button.background.color = "#FF0000";
+                    mapData[x][y] = 0;
+                }
+                else {
+                    _this.button.background.color = "#0000FF";
+                    mapData[x][y] = 1;
+                }
+                tile = mapEditor.children[y * mapData[0].length + x];
+                tile.setWalkable(mapData[x][y]);
+            };
             var sucai = new render.TextField;
             sucai.text = "网络素材:";
             sucai.x = 0;
@@ -75,12 +97,10 @@ var editor;
                 if (sucaibutton.background.color == "#0000FF") {
                     //  sucaibutton.text="fou"
                     sucaibutton.background.color = "#FF0000";
-                    sucaibutton.canwalk = false;
                 }
                 else {
                     //   sucaibutton.text = "shi"
                     sucaibutton.background.color = "#0000FF";
-                    sucaibutton.canwalk = true;
                 }
             };
         }

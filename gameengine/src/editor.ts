@@ -51,8 +51,10 @@ module editor {
     
     
     export class ControlPanel extends render.DisplayObjectContainer {
-        
-        constructor(){
+        xt;
+        yt;
+        button;
+        constructor(mapData,mapEditor){
             super();
             var hang = new render.TextField;
             hang.text = "行数：";
@@ -72,15 +74,36 @@ module editor {
             shifou.y = 60;
             this.addChild(shifou);
             
-            // var button = new ui.Button;
-            // button.x=100;
-            // button.y = 60;
-            // button.width = 60;
-            // button.height= 30;
-            // button.onClick = () =>{
-                
-            // }
-            // this.addChild(button);
+            this.xt= new render.TextField;
+            this.yt= new render.TextField;
+            this.xt.x = 60;
+            this.xt.y = 0;
+            this.yt.x = 60;
+            this.yt.y = 30;
+            this.addChild(this.xt);
+            this.addChild(this.yt);
+            
+            this.button = new ui.Button();
+            this.button.width = 60;
+            this.button.height = 30;
+            this.button.x=100;
+            this.button.y=60;
+            this.addChild(this.button);
+            this.button.onClick =()=>{
+                var x = parseInt(this.xt.text) - 1;
+                var y = parseInt(this.yt.text) - 1;
+                var tile = new Tile();
+                if (mapData[x][y] == 1) {
+                    this.button.background.color = "#FF0000";
+                    mapData[x][y] = 0;
+                }
+                else {
+                    this.button.background.color = "#0000FF";
+                    mapData[x][y] = 1;
+                }
+                tile = mapEditor.children[y * mapData[0].length + x];
+                tile.setWalkable(mapData[x][y]);
+            }
             
             var sucai = new render.TextField;
             sucai.text="网络素材:"
@@ -99,12 +122,12 @@ module editor {
                 if(sucaibutton.background.color =="#0000FF"){
                 //  sucaibutton.text="fou"
                     sucaibutton.background.color = "#FF0000"
-                             sucaibutton.canwalk = false;
+                             //sucaibutton.canwalk = false;
                 }
                 else{
                 //   sucaibutton.text = "shi"
                     sucaibutton.background.color = "#0000FF"
-                             sucaibutton.canwalk = true;
+                             //sucaibutton.canwalk = true;
                 }
                 
         }

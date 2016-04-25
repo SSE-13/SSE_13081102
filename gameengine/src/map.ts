@@ -1,5 +1,5 @@
 
-class newDisplayObject {
+/*class newDisplayObject {
 
     x = 0;
 
@@ -149,6 +149,6 @@ var imageList = ['TX-ground.png','TX-water.png','TX-stone.png','TX-grass.png','T
 //先加载资源，加载成功之后执行渲染队列
 loadResource(imageList, function() {
     drawQueue(renderQueue);
-})
+})*/
 
 
