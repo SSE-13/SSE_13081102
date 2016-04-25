@@ -40,6 +40,7 @@ var editor;
         function ControlPanel(mapData, mapEditor) {
             var _this = this;
             _super.call(this);
+            this.texture = ["TX-birdge.png", "TX-box1.1.png", "TX-box1.2.png", "TX-box1.3.png", "TX-box1.4.png", "TX-box2.1.png", "TX-box2.2.png", "TX-box2.3.png", "TX-box2.4.png", "TX-box3.1.png", "TX-box3.2.png", "TX-box3.3.png", "TX-box3.4.png", "TX-grass.png", "TX-ground.png", "TX-key.png", "TX-role.png", "TX-stone.png", "TX-wall.png", "TX-water.png"];
             var hang = new render.TextField;
             hang.text = "行数：";
             hang.x = 0;
@@ -85,26 +86,35 @@ var editor;
                 }
                 tile = mapEditor.children[y * mapData[0].length + x];
                 tile.setWalkable(mapData[x][y]);
+                if (tile.source == _this.TXsource) {
+                    _this.sucaibutton.background.color = "#0000FF";
+                }
+                else {
+                    _this.sucaibutton.background.color = "#FF0000";
+                }
             };
             var sucai = new render.TextField;
             sucai.text = "网络素材:";
             sucai.x = 0;
             sucai.y = 90;
             this.addChild(sucai);
-            var sucaibutton = new ui.Button;
-            sucaibutton.x = 100;
-            sucaibutton.y = 100;
-            sucaibutton.height = 30;
-            sucaibutton.width = 60;
-            this.addChild(sucaibutton);
-            sucaibutton.onClick = function () {
-                if (sucaibutton.background.color == "#0000FF") {
-                    //  sucaibutton.text="fou"
-                    sucaibutton.background.color = "#FF0000";
+            this.sucaibutton = new ui.Button;
+            this.sucaibutton.x = 100;
+            this.sucaibutton.y = 100;
+            this.sucaibutton.height = 30;
+            this.sucaibutton.width = 60;
+            this.addChild(this.sucaibutton);
+            this.sucaibutton.onClick = function () {
+                var x = parseInt(_this.xt.text) - 1;
+                var y = parseInt(_this.yt.text) - 1;
+                var tile = new Tile();
+                tile = mapEditor.children[y * mapData[0].length + x];
+                tile.source = _this.TXsource;
+                if (tile.source == _this.TXsource) {
+                    _this.sucaibutton.background.color = "#0000FF";
                 }
                 else {
-                    //   sucaibutton.text = "shi"
-                    sucaibutton.background.color = "#0000FF";
+                    _this.sucaibutton.background.color = "#FF0000";
                 }
             };
         }

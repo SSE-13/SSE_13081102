@@ -22,41 +22,56 @@ function createMapEditor() {
     }
     return world;
 }
-//    var re=new render.Rect;
-//    re.x=100;
-//    re.y=60;
-//    re.height=30;
-//    re.width=60;
+function TXEditor() {
+    var sucaiCount = panel.texture.length;
+    var TXcols = 4;
+    var TXrows = 5;
+    for (var row = 0; row < TXrows; row++) {
+        for (var col = 0; col < TXcols; col++) {
+            var tile = new editor.Tile();
+            tile.source = panel.texture[4 * row + col];
+            tile.x = col * editor.GRID_PIXEL_WIDTH;
+            tile.y = row * editor.GRID_PIXEL_HEIGHT + 150;
+            tile.ownedCol = col;
+            tile.ownedRow = row;
+            tile.width = editor.GRID_PIXEL_WIDTH;
+            tile.height = editor.GRID_PIXEL_HEIGHT;
+            tile.xposition = tile.x / editor.GRID_PIXEL_WIDTH + 1;
+            tile.yposition = tile.y / editor.GRID_PIXEL_HEIGHT + 1;
+            tile.xtext = tile.xposition.toString();
+            tile.ytext = tile.yposition.toString();
+            panel.addChild(tile);
+            eventCore.register(tile, events.displayObjectRectHitTest, onTXClick);
+        }
+    }
+}
 function onTileClick(tile) {
     console.log(tile);
-    // button.onClick = ()=> {
-    //  if(button.text=="否"){
-    //     button.text="是";
-    //    this. walkable =0;
-    //     button.background.color = "#0000FF"
-    // }else{
-    //     button.text="否";
-    //        this.walkable =1;
-    //     button.background.color = "#FF0000"
-    // }
-    // }
     var walkable = mapData[tile.ownedRow][tile.ownedCol];
-    // if(walkable==1){
-    //      panel.button.text="是";
-    //     panel.button.background.color = "#0000FF";
-    //     console.log("blue");
-    //}else{
-    //     panel.button.text="否";
-    //     panel.button.background.color = "#FF0000";
-    // }
-    // // panel.addChild(button)
     panel.yt.text = tile.xtext;
     panel.xt.text = tile.ytext;
-    //mapData[tile.ownedRow][tile.ownedCol]=walkable;
-    // tile.walkable=mapData[tile.ownedRow][tile.ownedCol];
-    //tile.setWalkable(walkable);
     panel.button.background.color = walkable ? "#0000FF" : "#FF0000";
     panel.button.text = walkable ? "是" : "否";
+    if (tile.source == panel.TXsource) {
+        panel.sucaibutton.background.color = "#0000FF";
+    }
+    else {
+        panel.sucaibutton.background.color = "#FF0000";
+    }
+}
+function onTXClick(tile) {
+    panel.TXsource = tile.source;
+    var x = parseInt(panel.xt.text) - 1;
+    var y = parseInt(panel.yt.text) - 1;
+    var mapTile = new editor.Tile();
+    mapTile = mapEditor.children[y * mapData[0].length + x];
+    if (tile.source == mapTile.source) {
+        panel.sucaibutton.background.color = "#0000FF";
+    }
+    else {
+        panel.sucaibutton.background.color = "#FF0000";
+    }
+    panel.sucaibutton.text = tile.source.substring(3, tile.source.length - 4);
 }
 var storage = data.Storage.getInstance();
 storage.readFile();
@@ -69,8 +84,6 @@ var stage = new render.DisplayObjectContainer();
 stage.addChild(mapEditor);
 var panel = new editor.ControlPanel(mapData, mapEditor);
 panel.x = 500;
-// panel.addChild(xt);
-// panel.addChild(yt);
-//panel.addChild(re);    
+var TextureEditor = new TXEditor();
 stage.addChild(panel);
 renderCore.start(stage, ["TX-birdge.png", "TX-box1.1.png", "TX-box1.2.png", "TX-box1.3.png", "TX-box1.4.png", "TX-box2.1.png", "TX-box2.2.png", "TX-box2.3.png", "TX-box2.4.png", "TX-box3.1.png", "TX-box3.2.png", "TX-box3.3.png", "TX-box3.4.png", "TX-grass.png", "TX-ground.png", "TX-key.png", "TX-role.png", "TX-stone.png", "TX-wall.png", "TX-water.png"]);
