@@ -8,22 +8,26 @@ var ui;
     var eventCore = events.EventCore.getInstance();
     var Button = (function (_super) {
         __extends(Button, _super);
+        //public canwalk:boolean;
         function Button() {
             var _this = this;
             _super.call(this);
-            this._text = "label";
+            this._text = " ";
             this.background = new render.Rect();
             this.background.width = this.width;
             this.background.height = this.height;
             this.label = new render.TextField();
             this.label.width = this.width;
             this.label.height = this.height;
+            this.label.x = -20;
+            this.label.y = 0;
             this.label.textAlign = "center";
             this.label.text = this.text;
             this.addChild(this.background);
             this.addChild(this.label);
+            // var i =0;
             eventCore.register(this, events.displayObjectRectHitTest, function () {
-                if (_this.onClick) {
+                if (_this.onClick()) {
                     _this.onClick();
                 }
             });

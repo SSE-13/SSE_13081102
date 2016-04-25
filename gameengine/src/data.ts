@@ -14,6 +14,8 @@ module data {
         }
 
 
+
+        
         public readFile() {
             var map_path = __dirname + "/map.json"
             var content = fs.readFileSync(map_path, "utf-8");

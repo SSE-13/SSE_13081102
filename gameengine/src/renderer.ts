@@ -113,7 +113,7 @@ module render {
 
 
         source;
-
+        
         render(context: CanvasRenderingContext2D) {
 
             var image = imagePool[this.source];
