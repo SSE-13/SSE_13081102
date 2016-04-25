@@ -113,6 +113,7 @@ module render {
 
 
         source;
+        //walkable:boolean;
         
         render(context: CanvasRenderingContext2D) {
 

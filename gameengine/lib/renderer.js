@@ -89,6 +89,7 @@ var render;
         function Bitmap() {
             _super.apply(this, arguments);
         }
+        //walkable:boolean;
         Bitmap.prototype.render = function (context) {
             var image = imagePool[this.source];
             if (image) {
