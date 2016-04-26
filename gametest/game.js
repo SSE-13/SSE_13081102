@@ -5,25 +5,25 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var game;
 (function (game) {
-    game.GRID_PIXEL_WIDTH = 50;
-    game.GRID_PIXEL_HEIGHT = 50;
+    game.GRID_PIXEL_WIDTH = 40;
+    game.GRID_PIXEL_HEIGHT = 40;
     var WorldMap = (function (_super) {
         __extends(WorldMap, _super);
         //  public _tile:game.Tile;
-        function WorldMap(mapData) {
+        function WorldMap(pmapData) {
             _super.call(this);
             this.isDirty = true;
-            this.mapData = mapData;
+            this._mapData = pmapData;
             this.cache = document.createElement("canvas");
-            this.cache.width = 400;
-            this.cache.height = 400;
-            var rows = mapData.length;
-            var cols = mapData[0].length;
+            this.cache.width = 480;
+            this.cache.height = 480;
+            var rows = this._mapData.length;
+            var cols = this._mapData[0].length;
             var grid = new astar.Grid(rows, cols);
             this.grid = grid;
             for (var i = 0; i < rows; i++) {
                 for (var j = 0; j < cols; j++) {
-                    var value = mapData[i][j];
+                    var value = this._mapData[i][j];
                     grid.setWalkable(j, i, value == 0 ? false : true); //0->不可走，0->可走
                 }
             }
@@ -46,24 +46,6 @@ var game;
         return Tile;
     }(render.Bitmap));
     game.Tile = Tile;
-    var Material = (function (_super) {
-        __extends(Material, _super);
-        function Material() {
-            _super.call(this);
-            this.materials = [];
-        }
-        Material.prototype.addMaterial = function (material) {
-            this.materials.push(material);
-        };
-        Material.prototype.render = function (context) {
-            for (var i = 0; i < this.materials.length; i++) {
-                var child = this.materials[i];
-                child.draw(context); //画的位置怎么确定？？
-            }
-        };
-        return Material;
-    }(render.DisplayObject));
-    game.Material = Material;
     /**
      *人物外观
      */
@@ -71,7 +53,7 @@ var game;
         __extends(BoyShape, _super);
         function BoyShape() {
             _super.call(this);
-            var head = new render.Bitmap("head.png");
+            var head = new render.Bitmap("TX-role.png");
             head.x = 0;
             head.y = 0;
             this.addChild(head);
@@ -91,6 +73,7 @@ var game;
             this.steps = 1;
             this.startX = 0;
             this.startY = 0;
+            this.canClick = true; //防止未到达终点时点击其他地方出现按的卡顿现象
         }
         BoyBehaviour.prototype.run = function (grid, row, col) {
             if (grid.getWalkable(col, row)) {
@@ -129,6 +112,7 @@ var game;
                 //  console.log(this.path);
                 // console.log(this.steps);
                 // console.log(this.path.length);
+                this.canClick = false;
                 if (this.steps < this.path.length) {
                     var targetNode = this.path[this.steps];
                     var targetx = targetNode.x * this.width;
@@ -149,6 +133,7 @@ var game;
                         if (this.steps == this.path.length - 1) {
                             this.steps = 1;
                             this.path = null;
+                            this.canClick = true;
                         }
                         else {
                             this.steps += 1;

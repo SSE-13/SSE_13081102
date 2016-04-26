@@ -5,16 +5,16 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var editor;
 (function (editor) {
-    editor.GRID_PIXEL_WIDTH = 50;
-    editor.GRID_PIXEL_HEIGHT = 50;
+    editor.GRID_PIXEL_WIDTH = 40;
+    editor.GRID_PIXEL_HEIGHT = 40;
     var WorldMap = (function (_super) {
         __extends(WorldMap, _super);
         function WorldMap() {
             _super.call(this);
             this.isDirty = true;
             this.cache = document.createElement("canvas");
-            this.cache.width = 400;
-            this.cache.height = 400;
+            this.cache.width = 480;
+            this.cache.height = 480;
         }
         WorldMap.prototype.render = function (context) {
             _super.prototype.render.call(this, context);

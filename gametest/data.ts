@@ -3,7 +3,8 @@
 module data {
     export class Storage {
 
-        public mapData;
+        public _mapData;
+        public _mapTexture;
         private static _instance: Storage;
 
         public static getInstance(): Storage {
@@ -23,18 +24,20 @@ module data {
             catch (exception) {
                 alert("xmlHttp Fail");
             }
-            
-            xmlHttp.onload = ()=> {
-                   if (xmlHttp.status == 200 || xmlHttp.status == 0) {
+
+            xmlHttp.onload = () => {
+                if (xmlHttp.status == 200 || xmlHttp.status == 0) {
                     var result = xmlHttp.responseText;
-                  //  alert(result);   
+                    //alert(result);   
                     var mapData = JSON.parse(result);
-                    this.mapData = mapData.map; 
-                  //  alert(mapData.map);      
+                    this._mapData = mapData.map;
+                    this._mapTexture = mapData.texture; 
+                    //   alert(mapData.map);     
+                    //   alert(mapData.texture); 
                     callback();
 
                 }
-                
+
             }
         }
         /*    public readFile() {

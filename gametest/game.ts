@@ -1,9 +1,9 @@
 module game {
 
 
-    export const GRID_PIXEL_WIDTH = 50;
+    export const GRID_PIXEL_WIDTH = 40;
 
-    export const GRID_PIXEL_HEIGHT = 50;
+    export const GRID_PIXEL_HEIGHT = 40;
 
 
     export class WorldMap extends render.DisplayObjectContainer {
@@ -12,23 +12,23 @@ module game {
         public isDirty = true;
 
         public grid: astar.Grid;
-        private mapData;
+        private _mapData;
         //  public _tile:game.Tile;
-        constructor(mapData) {
+        constructor(pmapData) {
             super();
-            this.mapData = mapData;
+            this._mapData = pmapData;
             this.cache = document.createElement("canvas");
-            this.cache.width = 400;
-            this.cache.height = 400;
-            var rows = mapData.length;
-            var cols = mapData[0].length;
+            this.cache.width = 480;
+            this.cache.height = 480;
+            var rows = this._mapData.length;
+            var cols = this._mapData[0].length;
             var grid = new astar.Grid(rows, cols);
             this.grid = grid;
             for (var i = 0; i < rows; i++) {
                 for (var j = 0; j < cols; j++) {
-                    var value = mapData[i][j]
+                 
+                    var value = this._mapData[i][j]
                     grid.setWalkable(j, i, value == 0 ? false : true);//0->不可走，0->可走
-
                 }
             }
             //       grid.setWalkable(5, 0, false);
@@ -51,26 +51,6 @@ module game {
         }
     }
 
-    export class Material extends render.DisplayObject {
-        materials: Array<render.Bitmap>;
-        constructor() {
-            super();
-            this.materials = [];
-        }
-        public addMaterial(material: render.Bitmap) {
-            this.materials.push(material);
-        }
-        render(context) {
-            for (var i = 0; i < this.materials.length; i++) {
-                var child = this.materials[i];
-                child.draw(context);//画的位置怎么确定？？
-            }
-        }
-
-
-
-
-    }
 
     /**
      *人物外观
@@ -79,7 +59,7 @@ module game {
 
         constructor() {
             super();
-            var head = new render.Bitmap("head.png");
+            var head = new render.Bitmap("TX-role.png");
             head.x = 0;
             head.y = 0;
             this.addChild(head);
@@ -96,7 +76,8 @@ module game {
         path;
         private startX = 0;
         private startY = 0;
-
+        canClick : Boolean = true;//防止未到达终点时点击其他地方出现按的卡顿现象
+ 
         
 
         public run(grid: astar.Grid, row, col) {
@@ -140,6 +121,7 @@ module game {
               //  console.log(this.path);
                // console.log(this.steps);
                // console.log(this.path.length);
+               this.canClick = false;
                 if (this.steps < this.path.length) {
                     var targetNode = this.path[this.steps];
                     var targetx = targetNode.x * this.width;
@@ -161,6 +143,7 @@ module game {
                         if (this.steps == this.path.length-1) {
                             this.steps = 1;
                             this.path = null;
+                            this.canClick = true;
                         } else {
                             this.steps += 1;
                         }

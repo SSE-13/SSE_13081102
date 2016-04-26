@@ -24,10 +24,12 @@ var data;
             xmlHttp.onload = function () {
                 if (xmlHttp.status == 200 || xmlHttp.status == 0) {
                     var result = xmlHttp.responseText;
-                    //  alert(result);   
+                    //alert(result);   
                     var mapData = JSON.parse(result);
-                    _this.mapData = mapData.map;
-                    //  alert(mapData.map);      
+                    _this._mapData = mapData.map;
+                    _this._mapTexture = mapData.texture;
+                    //   alert(mapData.map);     
+                    //   alert(mapData.texture); 
                     callback();
                 }
             };

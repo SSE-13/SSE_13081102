@@ -30,7 +30,7 @@ var editor;
             //this.bridge.source = "TX-wall.png";
         }
         Tile.prototype.setWalkable = function (value) {
-            this.source = value ? "TX-birdge.png" : "TX-wall.png";
+            this.source = value ? "TX-ground.png" : "TX-wall.png";
         };
         return Tile;
     }(render.Bitmap));
