@@ -129,7 +129,7 @@ module editor {
                 }
                 else {
                     this.button.background.color = "#0000FF";
-                    tile.source = texture[15];//"TX-ground.png";
+                    tile.source = texture[14];//"TX-ground.png";
                     this.button.text = "是";
                     mapData[y][x] = 1;
                 }
