@@ -125,7 +125,23 @@ module editor {
             backbutton.y = 420;
             this.addChild(backbutton);
             
+            var SaveHitTest = (localPoint:math.Point,displayObject:render.DisplayObject) =>{
+            if(localPoint.x>=0&&localPoint.x<=100&&localPoint.y>=0 && localPoint.y<=50)
+            return true;
+            }
+            function Save() {
+    
+            }
             
+             var BackHitTest = (localPoint:math.Point,displayObject:render.DisplayObject) =>{
+            if(localPoint.x>=0&&localPoint.x<=100&&localPoint.y>=0 && localPoint.y<=50)
+            return true;
+            }
+            function Back() {
+    
+            }
+            
+
 
 
             
