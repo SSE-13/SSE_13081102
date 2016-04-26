@@ -105,12 +105,29 @@ module editor {
             sucai.y = 90;
             this.addChild(sucai);
             
+            
             this.sucaibutton = new ui.Button;
             this.sucaibutton.x=100;
             this.sucaibutton.y = 100;
             this.sucaibutton.height = 30;
             this.sucaibutton.width = 60;
             this.addChild(this.sucaibutton);
+            
+            var savebutton = new render.Bitmap();
+            savebutton.source = "save.png"
+            savebutton.x = 0;
+            savebutton.y = 380;
+            this.addChild(savebutton);
+            
+            var backbutton = new render.Bitmap();
+            backbutton.source = "backout.png"
+            backbutton.x = 0;
+            backbutton.y = 420;
+            this.addChild(backbutton);
+            
+            
+
+
             
             
             

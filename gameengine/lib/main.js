@@ -92,7 +92,8 @@ var texture = ["TX-box1.1.png", "TX-box1.2.png", "TX-box1.3.png", "TX-box1.4.png
     "TX-box2.1.png", "TX-box2.2.png", "TX-box2.3.png", "TX-box2.4.png",
     "TX-box3.1.png", "TX-box3.2.png", "TX-box3.3.png", "TX-box3.4.png",
     "TX-wall.png", "TX-water.png",
-    "TX-ground.png", "TX-key.png", "TX-role.png",  "TX-birdge.png"];
+    "TX-ground.png", "TX-key.png", "TX-role.png",  "TX-birdge.png",
+    "save.png","backout.png"];
 //var unwalkableTX = ["TX-box1.1.png","TX-box1.2.png","TX-box1.3.png","TX-box1.4.png","TX-box2.1.png","TX-box2.2.png","TX-box2.3.png","TX-box2.4.png","TX-box3.1.png","TX-box3.2.png","TX-box3.3.png","TX-box3.4.png","TX-wall.png","TX-water.png"];
 var storage = data.Storage.getInstance();
 storage.readFile();
@@ -109,3 +110,5 @@ panel.x = 500;
 var TextureEditor = new TXEditor();
 stage.addChild(panel);
 renderCore.start(stage, texture);
+// var btn = [];
+//  renderCore.start(panel,btn);

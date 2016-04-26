@@ -74,6 +74,18 @@ var editor;
             sucai.x = 0;
             sucai.y = 90;
             this.addChild(sucai);
+            
+            var savebutton = new render.Bitmap();
+            savebutton.source = "save.png"
+            savebutton.x = 0;
+            savebutton.y = 380;
+            this.addChild(savebutton);
+            var backbutton = new render.Bitmap();
+            backbutton.source = "backout.png"
+            backbutton.x = 0;
+            backbutton.y = 420;
+            this.addChild(backbutton);
+
             this.sucaibutton = new ui.Button;
             this.sucaibutton.x = 100;
             this.sucaibutton.y = 100;
