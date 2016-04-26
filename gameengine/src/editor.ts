@@ -140,14 +140,7 @@ module editor {
             function Back() {
     
             }
-            
-
-
-
-            
-            
-            
-             
+                       
             this.button.onClick =()=>{
                 var x = parseInt(this.xt.text) - 1;
                 var y = parseInt(this.yt.text) - 1;

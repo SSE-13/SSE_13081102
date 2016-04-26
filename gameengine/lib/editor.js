@@ -92,6 +92,23 @@ var editor;
             this.sucaibutton.height = 30;
             this.sucaibutton.width = 60;
             this.addChild(this.sucaibutton);
+            
+            var SaveHitTest = (localPoint:math.Point,displayObject:render.DisplayObject) =>{
+            if(localPoint.x>=0&&localPoint.x<=100&&localPoint.y>=0 && localPoint.y<=50)
+            return true;
+            }
+            function Save() {
+    
+            }
+            
+             var BackHitTest = (localPoint:math.Point,displayObject:render.DisplayObject) =>{
+            if(localPoint.x>=0&&localPoint.x<=100&&localPoint.y>=0 && localPoint.y<=50)
+            return true;
+            }
+            function Back() {
+    
+            }
+            
             this.button.onClick = function () {
                 var x = parseInt(_this.xt.text) - 1;
                 var y = parseInt(_this.yt.text) - 1;
