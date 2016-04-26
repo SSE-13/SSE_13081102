@@ -14,7 +14,9 @@ var data;
             var map_path = __dirname + "/map.json";
             var content = fs.readFileSync(map_path, "utf-8");
             var obj = JSON.parse(content);
-            this.mapData = obj.map;
+            this.mapData = obj[0].map;
+            this.textureData = obj[1].texture;
+            //console.log(this.textureData[1][0]);
         };
         Storage.prototype.saveFile = function () {
         };

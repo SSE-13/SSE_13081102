@@ -44,13 +44,11 @@ module editor {
        
         constructor() {
             super();
-            //this.wall.source = "TX-birdge.png";
-            //this.bridge.source = "TX-wall.png";
-            
         }
 
         public setWalkable(value) {
-            this.source = value ? "TX-ground.png" : "TX-wall.png";
+            //this.source = value ? "TX-birdge.png" : "TX-wall.png";
+            this.walkable = value ? true:false;
         }
     }
     
@@ -61,11 +59,11 @@ module editor {
         button;
         sucaibutton;
         TXsource:String;
-        texture;
+        //texture;
         constructor(mapData,mapEditor){
             super();
             
-            this.texture = ["TX-birdge.png","TX-box1.1.png","TX-box1.2.png","TX-box1.3.png","TX-box1.4.png","TX-box2.1.png","TX-box2.2.png","TX-box2.3.png","TX-box2.4.png","TX-box3.1.png","TX-box3.2.png","TX-box3.3.png","TX-box3.4.png","TX-grass.png","TX-ground.png","TX-key.png","TX-role.png","TX-stone.png","TX-wall.png","TX-water.png"];
+            
             
             var hang = new render.TextField;
             hang.text = "行数：";
@@ -100,24 +98,71 @@ module editor {
             this.button.x=100;
             this.button.y=60;
             this.addChild(this.button);
+           
+            var sucai = new render.TextField;
+            sucai.text="网络素材:"
+            sucai.x = 0;
+            sucai.y = 90;
+            this.addChild(sucai);
             
             
+            this.sucaibutton = new ui.Button;
+            this.sucaibutton.x=100;
+            this.sucaibutton.y = 100;
+            this.sucaibutton.height = 30;
+            this.sucaibutton.width = 60;
+            this.addChild(this.sucaibutton);
+            
+            var savebutton = new render.Bitmap();
+            savebutton.source = "save.png"
+            savebutton.x = 0;
+            savebutton.y = 380;
+            this.addChild(savebutton);
+            
+            var backbutton = new render.Bitmap();
+            backbutton.source = "backout.png"
+            backbutton.x = 0;
+            backbutton.y = 420;
+            this.addChild(backbutton);
+            
+            var SaveHitTest = (localPoint:math.Point,displayObject:render.DisplayObject) =>{
+            if(localPoint.x>=0&&localPoint.x<=100&&localPoint.y>=0 && localPoint.y<=50)
+            return true;
+            }
+            function Save() {
+    
+            }
+            
+             var BackHitTest = (localPoint:math.Point,displayObject:render.DisplayObject) =>{
+            if(localPoint.x>=0&&localPoint.x<=100&&localPoint.y>=0 && localPoint.y<=50)
+            return true;
+            }
+            function Back() {
+    
+            }
+                       
             this.button.onClick =()=>{
                 var x = parseInt(this.xt.text) - 1;
                 var y = parseInt(this.yt.text) - 1;
                 var tile = new Tile();
-                if (mapData[x][y] == 1) {
+                tile = mapEditor.children[x * mapData[0].length + y];
+                if (tile.walkable) {
                     this.button.background.color = "#FF0000";
+                    tile.source = texture[13];//"TX-water.png";
                     this.button.text = "否";
-                    mapData[x][y] = 0;
+                    
+                    mapData[y][x] = 0;
                 }
                 else {
                     this.button.background.color = "#0000FF";
+                    tile.source = texture[14];//"TX-ground.png";
                     this.button.text = "是";
-                    mapData[x][y] = 1;
+                    mapData[y][x] = 1;
                 }
-                tile = mapEditor.children[y * mapData[0].length + x];
-                tile.setWalkable(mapData[x][y]);
+                this.TXsource = tile.source;
+                this.sucaibutton.text = tile.source.substring(3,tile.source.length-4);
+                
+                tile.setWalkable(mapData[y][x]);
                 
                 if(tile.source == this.TXsource){
                     this.sucaibutton.background.color = "#0000FF";
@@ -126,29 +171,22 @@ module editor {
                 }
             }
             
-            var sucai = new render.TextField;
-            sucai.text="网络素材:"
-            sucai.x = 0;
-            sucai.y = 90;
-            this.addChild(sucai);
             
-            this.sucaibutton = new ui.Button;
-            this.sucaibutton.x=100;
-            this.sucaibutton.y = 100;
-            this.sucaibutton.height = 30;
-            this.sucaibutton.width = 60;
-            this.addChild(this.sucaibutton);
+            
+            
             this.sucaibutton.onClick = () =>{
                 var x = parseInt(this.xt.text) - 1;
                 var y = parseInt(this.yt.text) - 1;
                 var tile = new Tile();
-                tile = mapEditor.children[y * mapData[0].length + x];
+                tile = mapEditor.children[x * mapData[0].length + y];
+                
                 tile.source = this.TXsource;
                  if(tile.source == this.TXsource){
                     this.sucaibutton.background.color = "#0000FF";
                 }else{
                     this.sucaibutton.background.color = "#FF0000";
                 }
+                
         }
     
     }
