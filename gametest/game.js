@@ -194,7 +194,7 @@ var game;
                             }
                         }
                         if (astar.Node.isPumpkinOpen && targetNode.pumpkinLevel2) {
-                            //  astar.Node.isPumpkinOpen = false;
+                            astar.Node.isPumpkinOpen = false;
                             for (var i = 0; i < 4; i++) {
                                 var newTile;
                                 switch (i) {
