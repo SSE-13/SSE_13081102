@@ -208,7 +208,7 @@ module Cmd {
             this.x = x;
             this.y = y;
             this.TXdata = TXdata;
-            this.TXdata = TXdata;
+            this.MPdata = MPdata;
             this.sucaiButtonColor = sucaiButtonColor;
             this.tileSource = tileSource;
             this.tileSourceNum = tileSourceNum;
