@@ -8,7 +8,6 @@ var ui;
     var eventCore = events.EventCore.getInstance();
     var Button = (function (_super) {
         __extends(Button, _super);
-        //public canwalk:boolean;
         function Button() {
             var _this = this;
             _super.call(this);
@@ -25,7 +24,6 @@ var ui;
             this.label.text = this.text;
             this.addChild(this.background);
             this.addChild(this.label);
-            // var i =0;
             eventCore.register(this, events.displayObjectRectHitTest, function () {
                 if (_this.onClick()) {
                     _this.onClick();
