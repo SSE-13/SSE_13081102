@@ -174,7 +174,10 @@ var editor;
                             case "TX-box1.3.png":
                                 mapData[y][x] = 11;
                                 break;
-                            case "TX-box2.3.png":
+                            case "TX-box1.1.png":
+                                mapData[y][x] = 12;
+                                break;
+                            case "TX-box2.1.png":
                                 mapData[y][x] = 12;
                                 break;
                             default:
