@@ -33,7 +33,7 @@ module game {
                     {
                         grid.getNode(j, i).isKey = true;
                     }
-                    if(this._mapData[i][j] == 11)//"map"中用11表示网格处是TX-box1.3.png图片
+                    if(this._mapData[i][j] == 11)//"map"中用11表示网格处是TX-box1.3.png图片&&TX-box2.3.png
                     {
                         grid.getNode(j,i).isPumpkinClose = true;
                     }
