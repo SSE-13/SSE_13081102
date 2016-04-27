@@ -221,12 +221,24 @@ module editor {
                         tile.sourceNum = this.TXnum[0];
                         textureData[y][x] = tile.sourceNum;
                         
-                        if(tile.source == "TX-key.png"){//若赋予的材质是key，mapdata需特殊处理为9
-                            mapData[y][x] = 9;
-                        }else if(tile.walkable){
-                            mapData[y][x] = 1;
-                        }else{
-                            mapData[y][x] = 0;
+                        
+                        switch (tile.source) {
+                            case "TX-key.png":
+                                mapData[y][x] = 9;
+                                break;
+                            case "TX-box1.3.png":
+                                mapData[y][x] = 11;
+                                break;
+                            case "TX-box2.3.png":
+                                mapData[y][x] = 12;
+                                break;
+                            default:
+                                if (tile.walkable) {
+                                    mapData[y][x] = 1;
+                                } else {
+                                    mapData[y][x] = 0;
+                                }
+                                break;
                         }
 
                         if (tile.source == this.TXsource[0]) {//赋素材按钮变化
