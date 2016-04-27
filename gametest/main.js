@@ -49,22 +49,16 @@ function createMap(pMapData, pmapTexture) {
                     _tile = new game.Tile("TX-wall.png");
                     break;
                 case 13:
-                    _tile = new game.Tile("TX-ground.png");
-                    break;
-                case 14:
-                    _tile = new game.Tile("TX-grass.png");
-                    break;
-                case 15:
                     _tile = new game.Tile("TX-water.png");
                     break;
-                case 16:
+                case 14:
+                    _tile = new game.Tile("TX-ground.png");
+                    break;
+                case 15:
                     _tile = new game.Tile("TX-key.png");
                     _tile.isKey = true;
                     break;
-                case 17:
-                    _tile = new game.Tile("TX-stone.png");
-                    break;
-                case 18:
+                case 16:
                     _tile = new game.Tile("TX-birdge.png");
                     break;
                 default:
@@ -101,9 +95,10 @@ var renderCore = new render.RenderCore();
 var eventCore = events.EventCore.getInstance();
 eventCore.init();
 var boyShape = new game.BoyShape();
-boyShape.x = 40;
-boyShape.y = 40; //= =！ 不管用
+//boyShape.x=40;
+//boyShape.y=40;//= =！ 不管用
 var body = new game.BoyBehaviour(boyShape);
+body.x = body.y = 40;
 var ticker = new Ticker();
 var stage = new render.DisplayObjectContainer();
 var map;

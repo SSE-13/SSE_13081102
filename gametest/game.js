@@ -35,7 +35,6 @@ var game;
                     }
                 }
             }
-            //       grid.setWalkable(5, 0, false);
         }
         WorldMap.prototype.render = function (context) {
             _super.prototype.render.call(this, context);
@@ -195,7 +194,7 @@ var game;
                             }
                         }
                         if (astar.Node.isPumpkinOpen && targetNode.pumpkinLevel2) {
-                            astar.Node.isPumpkinOpen = false;
+                            //  astar.Node.isPumpkinOpen = false;
                             for (var i = 0; i < 4; i++) {
                                 var newTile;
                                 switch (i) {

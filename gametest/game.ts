@@ -37,13 +37,12 @@ module game {
                     {
                         grid.getNode(j,i).isPumpkinClose = true;
                     }
-                    if(this._mapData[i][j] == 12)//"map"中用12表示网格处是TX-box2.1.png图片
+                    if(this._mapData[i][j] == 12)//"map"中用12表示网格处是TX-box1.1.png图片&&TX-box2.1.png
                     {
                         grid.getNode(j,i).pumpkinLevel2 = true;
                     }
                 }
-            }
-            //       grid.setWalkable(5, 0, false);
+            }  
         }
 
         render(context: CanvasRenderingContext2D) {
@@ -211,7 +210,7 @@ module game {
                             }
                         }
                          if (astar.Node.isPumpkinOpen && targetNode.pumpkinLevel2) {
-                            astar.Node.isPumpkinOpen = false;
+                          //  astar.Node.isPumpkinOpen = false;
                             for (var i = 0; i < 4; i++) {
                                 var newTile;
                                 switch (i) {

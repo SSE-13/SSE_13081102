@@ -21,7 +21,7 @@ module data {
             var xmlHttp;
             xmlHttp = new XMLHttpRequest();
             try {
-                xmlHttp.open("GET", "json2.txt", true);
+                xmlHttp.open("GET", "json3.txt", true);
                 xmlHttp.send(null);
             }
             catch (exception) {
