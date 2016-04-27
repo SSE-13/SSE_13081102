@@ -39,7 +39,7 @@ function TXEditor() {//素材网格加载
     var sucaiCount = texture.length;//素材总数
     var TXcols = 4;
     var TXrows = sucaiCount / TXcols;//5;
-    var unWalkableTXCount = 14;//不可走的素材个数
+    //var unWalkableTXCount = 14;//不可走的素材个数
     
     var count = 0;//已添加的素材个数
 
@@ -51,7 +51,7 @@ function TXEditor() {//素材网格加载
                     var num = 4 * row + col;
                     tile.sourceNum = num;
                     tile.source = texture[tile.sourceNum];
-                    if (num > unWalkableTXCount-1) {
+                    if (num != 12 && num !=13){//> unWalkableTXCount-1) {
                         tile.walkable = true;
                     } else {
                         tile.walkable = false;
