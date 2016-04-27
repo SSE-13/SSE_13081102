@@ -18,7 +18,7 @@ module data {
             var xmlHttp;
             xmlHttp = new XMLHttpRequest();
             try {
-                xmlHttp.open("GET", "json.txt", true);
+                xmlHttp.open("GET", "json2.txt", true);
                 xmlHttp.send(null);
             }
             catch (exception) {
@@ -34,7 +34,7 @@ module data {
                     this._mapTexture = mapData.texture; 
                     //   alert(mapData.map);     
                     //   alert(mapData.texture); 
-                    callback();
+                    callback();//??
 
                 }
 

@@ -100,6 +100,10 @@ module render {
             this.children.push(child);
             child.parent = this;
         }
+        getChild(n:number)
+        {
+            return this.children[n];
+        }
 
         render(context) {
             for (var i = 0; i < this.children.length; i++) {

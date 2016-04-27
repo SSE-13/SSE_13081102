@@ -25,6 +25,9 @@ var game;
                 for (var j = 0; j < cols; j++) {
                     var value = this._mapData[i][j];
                     grid.setWalkable(j, i, value == 0 ? false : true); //0->不可走，0->可走
+                    if (this._mapData[i][j] == 9) {
+                        grid.getNode(j, i).isKey = true;
+                    }
                 }
             }
             //       grid.setWalkable(5, 0, false);
@@ -53,10 +56,11 @@ var game;
         __extends(BoyShape, _super);
         function BoyShape() {
             _super.call(this);
-            var head = new render.Bitmap("TX-role.png");
-            head.x = 0;
-            head.y = 0;
-            this.addChild(head);
+            var role = new render.Bitmap("TX-role.png");
+            role.x = 0;
+            role.y = 0;
+            this.role = role;
+            this.addChild(this.role);
         }
         return BoyShape;
     }(render.DisplayObjectContainer));
@@ -73,9 +77,14 @@ var game;
             this.steps = 1;
             this.startX = 0;
             this.startY = 0;
-            this.canClick = true; //防止未到达终点时点击其他地方出现按的卡顿现象
+            //   canClick: Boolean = true;//防止未到达终点时点击其他地方出现按的卡顿现象
+            this.isGetKey = false;
         }
+        // public upDateMap(_map: game.WorldMap) {
+        //     _map = body.map;
+        // }
         BoyBehaviour.prototype.run = function (grid, row, col) {
+            //           setInterval(this.upDateMap(tile), 1000 / 60);//间隔一定时间调用
             if (grid.getWalkable(col, row)) {
                 grid.setStartNode(this.startX, this.startY);
                 grid.setEndNode(col, row);
@@ -108,13 +117,10 @@ var game;
         };
         BoyBehaviour.prototype.onTicker = function (duringTime) {
             if (this.path != null) {
-                // console.log("onTicker");
-                //  console.log(this.path);
-                // console.log(this.steps);
-                // console.log(this.path.length);
-                this.canClick = false;
+                // this.canClick = false;　//正在行走过程中不能点击
                 if (this.steps < this.path.length) {
-                    var targetNode = this.path[this.steps];
+                    var targetNode;
+                    targetNode = this.path[this.steps];
                     var targetx = targetNode.x * this.width;
                     var targety = targetNode.y * this.height;
                     if (this.x < targetx) {
@@ -130,10 +136,48 @@ var game;
                         this.y = (this.y - this.vy * duringTime < targety) ? targety : (this.y - this.vy * duringTime);
                     }
                     if (this.x == targetx && this.y == targety) {
+                        if (targetNode.isKey) {
+                            targetNode.isKey = false;
+                            this.isGetKey = true;
+                            console.log("getKey");
+                            /**
+                             * 新建替换贴图
+                             */
+                            var newTile;
+                            newTile = new game.Tile("TX-wall.png");
+                            newTile.x = targetx;
+                            newTile.y = targety;
+                            newTile.ownedCol = targetx / this.width;
+                            newTile.ownedRow = targety / this.height;
+                            newTile.width = game.GRID_PIXEL_WIDTH;
+                            newTile.height = game.GRID_PIXEL_HEIGHT;
+                            /**
+                             * 新建人物
+                             */
+                            var boyShape = new game.BoyShape();
+                            boyShape.role.x = targetx;
+                            boyShape.role.y = targety;
+                            var body = new game.BoyBehaviour(boyShape);
+                            var ticker = new Ticker();
+                            var stage = new render.DisplayObjectContainer();
+                            this.map.addChild(newTile);
+                            for (var i = 0; i < 16; i++) {
+                                //this.map.getChild(i);
+                                eventCore.register(this.map.getChild(i), events.displayObjectRectHitTest, function onTileClick(_tile) {
+                                    body.run(this.map.grid, _tile.ownedRow, _tile.ownedCol);
+                                });
+                            }
+                            stage.addChild(this.map);
+                            body.map = this.map;
+                            stage.addChild(boyShape);
+                            ticker.start([body]);
+                            ticker.onTicker();
+                            console.log("a");
+                            renderCore.start(stage, []);
+                        }
                         if (this.steps == this.path.length - 1) {
                             this.steps = 1;
                             this.path = null;
-                            this.canClick = true;
                         }
                         else {
                             this.steps += 1;

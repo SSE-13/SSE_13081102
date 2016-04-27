@@ -13,10 +13,12 @@ module astar {
         costMultiplier: number = 1.0;
         visited: Boolean = false;
         inPath: Boolean = false;
+        isKey :Boolean;
 
         constructor(x: number, y: number) {
             this.x = x;
             this.y = y;
+            this.isKey = false;
         }
 
         toString() {

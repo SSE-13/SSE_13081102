@@ -8,6 +8,7 @@ var astar;
             this.inPath = false;
             this.x = x;
             this.y = y;
+            this.isKey = false;
         }
         Node.prototype.toString = function () {
             if (this.inPath) {

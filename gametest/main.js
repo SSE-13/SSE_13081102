@@ -2,7 +2,7 @@ function createMap(pMapData, pmapTexture) {
     //  var world = new editor.WorldMap();
     //  var rows = mapData.length;
     //  var cols = mapData[0].length;   
-    var tile = new game.WorldMap(pMapData);
+    var map = new game.WorldMap(pMapData);
     var rows = pMapData.length;
     var cols = pMapData[0].length;
     for (var col = 0; col < cols; col++) {
@@ -59,6 +59,7 @@ function createMap(pMapData, pmapTexture) {
                           break;
                       case 16:
                           _tile = new game.Tile("TX-key.png");
+                          _tile.isKey = true;
                           break;
                       case 17:
                           _tile = new game.Tile("TX-stone.png");
@@ -69,7 +70,12 @@ function createMap(pMapData, pmapTexture) {
                       default:
                           break;
                   }*/
-            if (tile.grid.getWalkable(col, row)) {
+            if (pMapData[row][col] == 9) {
+                _tile = new game.Tile("TX-key.png");
+                _tile.isKey = true;
+                console.log("key");
+            }
+            else if (map.grid.getWalkable(col, row)) {
                 _tile = new game.Tile("TX-ground.png");
             }
             else {
@@ -81,24 +87,23 @@ function createMap(pMapData, pmapTexture) {
             _tile.ownedRow = row;
             _tile.width = game.GRID_PIXEL_WIDTH;
             _tile.height = game.GRID_PIXEL_HEIGHT;
-            tile.addChild(_tile);
-            eventCore.register(_tile, events.displayObjectRectHitTest, onTileClick);
+            map.addChild(_tile);
+            eventCore.register(_tile, events.displayObjectRectHitTest, onTileClick); //为什么先addChild,再注册点击事件？
         }
     }
-    return tile;
+    return map;
 }
-function onTileClick(tile) {
-    console.log(tile);
-    if (body.canClick) {
-        body.run(map.grid, tile.ownedRow, tile.ownedCol);
-    }
+function onTileClick(_tile) {
+    console.log(_tile);
+    // if (body.canClick) {
+    body.run(map.grid, _tile.ownedRow, _tile.ownedCol);
+    // }
 }
 var renderCore = new render.RenderCore();
 var eventCore = events.EventCore.getInstance();
 eventCore.init();
 var boyShape = new game.BoyShape();
 var body = new game.BoyBehaviour(boyShape);
-//var ticker = new Ticker();
 var ticker = new Ticker();
 var stage = new render.DisplayObjectContainer();
 var map;
@@ -106,11 +111,13 @@ var storage = data.Storage.getInstance();
 var onLoadMapDataSuccess = function () {
     map = createMap(storage._mapData, storage._mapTexture);
     stage.addChild(map);
+    body.map = map;
     stage.addChild(boyShape);
     ticker.start([body]);
     ticker.onTicker();
     renderCore.start(stage, ["TX-box.png", "TX-box1.1.png", "TX-box1.2.png", "TX-box1.3.png", "TX-box1.4.png", "TX-box2.1.png", "TX-box2.2.png", "TX-box2.3.png", "TX-box2.4.png",
         "TX-box3.1.png", "TX-box3.2.png", "TX-box3.3.png", "TX-box3.4.png", "TX-wall.png",
         "TX-water.png", "TX-grass.png", "TX-ground.png", "TX-key.png", "TX-role.png", "TX-stone.png", "TX-birdge.png"]);
+    //renderCore.start(stage, []);
 };
 storage.createXMLHttpRequest(onLoadMapDataSuccess);

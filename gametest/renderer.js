@@ -75,6 +75,9 @@ var render;
             this.children.push(child);
             child.parent = this;
         };
+        DisplayObjectContainer.prototype.getChild = function (n) {
+            return this.children[n];
+        };
         DisplayObjectContainer.prototype.render = function (context) {
             for (var i = 0; i < this.children.length; i++) {
                 var child = this.children[i];

@@ -26,9 +26,14 @@ module game {
             this.grid = grid;
             for (var i = 0; i < rows; i++) {
                 for (var j = 0; j < cols; j++) {
-                 
+
                     var value = this._mapData[i][j]
                     grid.setWalkable(j, i, value == 0 ? false : true);//0->不可走，0->可走
+                    
+                    if (this._mapData[i][j] == 9)//"map"中用9表示网格处是钥匙
+                    {
+                        grid.getNode(j, i).isKey = true;
+                    }
                 }
             }
             //       grid.setWalkable(5, 0, false);
@@ -56,13 +61,14 @@ module game {
      *人物外观
      */
     export class BoyShape extends render.DisplayObjectContainer {
-
+            role : render.Bitmap;
         constructor() {
             super();
-            var head = new render.Bitmap("TX-role.png");
-            head.x = 0;
-            head.y = 0;
-            this.addChild(head);
+            var role = new render.Bitmap("TX-role.png");
+            role.x = 0;
+            role.y = 0;
+            this.role= role;
+            this.addChild(this.role);
         }
 
     }
@@ -76,11 +82,17 @@ module game {
         path;
         private startX = 0;
         private startY = 0;
-        canClick : Boolean = true;//防止未到达终点时点击其他地方出现按的卡顿现象
- 
-        
+     //   canClick: Boolean = true;//防止未到达终点时点击其他地方出现按的卡顿现象
+        isGetKey: Boolean = false;
+        map: game.WorldMap;
 
+        // public upDateMap(_map: game.WorldMap) {
+        //     _map = body.map;
+        // }
+        
         public run(grid: astar.Grid, row, col) {
+            //           setInterval(this.upDateMap(tile), 1000 / 60);//间隔一定时间调用
+            
             if (grid.getWalkable(col, row)) {
                 grid.setStartNode(this.startX, this.startY);
                 grid.setEndNode(col, row);
@@ -88,6 +100,7 @@ module game {
                 findpath.setHeurisitic(findpath.diagonal);
                 var result = findpath.findPath(grid);//A*里面的方法，传入起点和终点
                 this.path = findpath._path;
+
                 console.log(this.path)
                 if (this.path != null) {
                     this.startX = col;//网格的坐标和数组的坐标相反
@@ -98,6 +111,7 @@ module game {
                 console.log(grid.getWalkable(col, row));
                 console.log("此处不可走");
             }
+            
             
             //console.log(result);
             //console.log(this.path.length);
@@ -116,17 +130,15 @@ module game {
         public onTicker(duringTime) {
 
 
-            if (this.path != null) {
-               // console.log("onTicker");
-              //  console.log(this.path);
-               // console.log(this.steps);
-               // console.log(this.path.length);
-               this.canClick = false;
+            if (this.path != null) { 
+               // this.canClick = false;　//正在行走过程中不能点击
                 if (this.steps < this.path.length) {
-                    var targetNode = this.path[this.steps];
+                    var targetNode: astar.Node;
+                    targetNode = this.path[this.steps];
+                     
                     var targetx = targetNode.x * this.width;
-                    var targety = targetNode.y * this.height;  
-                   
+                    var targety = targetNode.y * this.height;
+
                     if (this.x < targetx) {
                         this.x = (this.x + this.vx * duringTime > targetx) ? targetx : (this.x + this.vx * duringTime);
                     }//移动
@@ -140,10 +152,57 @@ module game {
                         this.y = (this.y - this.vy * duringTime < targety) ? targety : (this.y - this.vy * duringTime);
                     }
                     if (this.x == targetx && this.y == targety) {
-                        if (this.steps == this.path.length-1) {
+                        if (targetNode.isKey) {
+                            targetNode.isKey=false;
+                            this.isGetKey = true;
+                            console.log("getKey");
+                            /**
+                             * 新建替换贴图
+                             */
+                            var newTile;
+                            newTile = new game.Tile("TX-wall.png");
+                            newTile.x = targetx;
+                            newTile.y = targety;
+                            newTile.ownedCol = targetx / this.width;
+                            newTile.ownedRow = targety / this.height;
+                            newTile.width = game.GRID_PIXEL_WIDTH;
+                            newTile.height = game.GRID_PIXEL_HEIGHT;
+
+                            /**
+                             * 新建人物
+                             */
+                            var boyShape = new game.BoyShape();
+                            boyShape.role.x = targetx;
+                            boyShape.role.y = targety;
+                            var body = new game.BoyBehaviour(boyShape);
+                            var ticker = new Ticker();                           
+                            
+                            var stage = new render.DisplayObjectContainer();
+                            this.map.addChild(newTile);
+                              for(var i=0;i<16;i++)
+                            {
+                                //this.map.getChild(i);
+                                eventCore.register(this.map.getChild(i), events.displayObjectRectHitTest, function onTileClick(_tile:game.Tile){
+                                    body.run(this.map.grid, _tile.ownedRow, _tile.ownedCol);
+                                });
+                            }
+                            
+                         
+                            stage.addChild(this.map);
+                            body.map = this.map;
+                            stage.addChild(boyShape);
+                            ticker.start([body]);
+                            ticker.onTicker();
+                            console.log("a");
+                           
+                            
+                          
+                            renderCore.start(stage, []);
+                        }
+                        if (this.steps == this.path.length - 1) {
                             this.steps = 1;
                             this.path = null;
-                            this.canClick = true;
+ //                           this.canClick = true;
                         } else {
                             this.steps += 1;
                         }
