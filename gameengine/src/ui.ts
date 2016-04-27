@@ -37,8 +37,6 @@ module ui {
         public label: render.TextField;
         public _text: string = " ";
 
-//public canwalk:boolean;
-
         constructor() {
 
             super();
@@ -54,28 +52,11 @@ module ui {
             this.label.text = this.text;
             this.addChild(this.background);
             this.addChild(this.label);
-// var i =0;
             eventCore.register(this, events.displayObjectRectHitTest, () => {
                 if (this.onClick()) { 
-                    this.onClick();                                
-
-                    
-                }
-   
-               
+                    this.onClick();                                 
+                } 
             });
-
-
         }
-
-
-
-
-
-
-
     }
-
-
-
 }

@@ -113,6 +113,7 @@ module render {
 
 
         source;
+        sourceNum;
         //walkable:boolean;
         
         render(context: CanvasRenderingContext2D) {
@@ -216,11 +217,15 @@ module render {
          * @param renderQueue 渲染队列
          * @param imageList 资源列表
          */
-        start(stage: DisplayObject, resourceList = []) {
+        start(stage: DisplayObject, resourceLista = [],resourceListb = []) {
             stage.parent = null;
             this.stage = stage;
             var self = this;
-            loadResource(resourceList, function () {
+            loadResource(resourceLista, function () {
+                requestAnimationFrame(self.onEnterFrame.bind(self));
+            })
+            
+            loadResource(resourceListb, function () {
                 requestAnimationFrame(self.onEnterFrame.bind(self));
             })
 

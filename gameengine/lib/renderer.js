@@ -183,12 +183,16 @@ var render;
          * @param renderQueue 渲染队列
          * @param imageList 资源列表
          */
-        RenderCore.prototype.start = function (stage, resourceList) {
-            if (resourceList === void 0) { resourceList = []; }
+        RenderCore.prototype.start = function (stage, resourceLista, resourceListb) {
+            if (resourceLista === void 0) { resourceLista = []; }
+            if (resourceListb === void 0) { resourceListb = []; }
             stage.parent = null;
             this.stage = stage;
             var self = this;
-            loadResource(resourceList, function () {
+            loadResource(resourceLista, function () {
+                requestAnimationFrame(self.onEnterFrame.bind(self));
+            });
+            loadResource(resourceListb, function () {
                 requestAnimationFrame(self.onEnterFrame.bind(self));
             });
         };
