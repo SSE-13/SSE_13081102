@@ -167,28 +167,41 @@ var editor;
                         tile.source = _this.TXsource[0]; //赋素材
                         tile.sourceNum = _this.TXnum[0];
                         textureData[y][x] = tile.sourceNum;
-                        switch (tile.source) {
-                            case "TX-key.png":
-                                mapData[y][x] = 9;
-                                break;
-                            case "TX-box1.3.png":
-                                mapData[y][x] = 11;
-                                break;
-                            case "TX-box1.1.png":
-                                mapData[y][x] = 12;
-                                break;
-                            case "TX-box2.1.png":
-                                mapData[y][x] = 12;
-                                break;
-                            default:
-                                if (tile.walkable) {
-                                    mapData[y][x] = 1;
-                                }
-                                else {
-                                    mapData[y][x] = 0;
-                                }
-                                break;
+                        if (tile.source == "TX-key.png") {
+                            mapData[y][x] = 9;
                         }
+                        else if (tile.source == "TX-box1.3.png" || tile.source == "TX-box2.3.png") {
+                            mapData[y][x] = 11;
+                        }
+                        else if (tile.source == "TX-box1.1.png" || tile.source == "TX-box2.1.png") {
+                            mapData[y][x] = 12;
+                        }
+                        else {
+                            if (tile.walkable) {
+                                mapData[y][x] = 1;
+                            }
+                            else {
+                                mapData[y][x] = 0;
+                            }
+                        }
+                        // switch (tile.source) {
+                        //     case "TX-key.png":
+                        //         mapData[y][x] = 9;
+                        //         break;
+                        //     case "TX-box1.3.png":
+                        //         mapData[y][x] = 11;
+                        //         break;
+                        //     case "TX-box1.1.png":
+                        //         mapData[y][x] = 12;
+                        //         break;
+                        //     default:
+                        //         if (tile.walkable) {
+                        //             mapData[y][x] = 1;
+                        //         } else {
+                        //             mapData[y][x] = 0;
+                        //         }
+                        //         break;
+                        // }
                         if (tile.source == _this.TXsource[0]) {
                             _this.sucaibutton.background.color = "#0000FF";
                         }

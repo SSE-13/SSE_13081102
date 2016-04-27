@@ -45,9 +45,9 @@ module editor {
         }
 
         public setWalkable(value) {
-            if (value != 0) {
+            if(value!=0){
                 this.walkable = true;
-            } else {
+            }else{
                 this.walkable = false;
             }
         }
@@ -61,7 +61,7 @@ module editor {
         sucaibutton;
         undoButton;
         TXsource: String[];//当前用户所选素材的名字
-        TXnum: Number[];
+        TXnum:Number[];
         TXwalkable: Boolean[];//当前用户所选素材的可走性
 
         constructor(mapData, mapEditor) {
@@ -69,7 +69,7 @@ module editor {
             this.TXsource = [];
             this.TXwalkable = [];
             this.TXnum = [];
-
+            
             var hang = new render.TextField;
             hang.text = "行数：";
             hang.x = 0;
@@ -115,35 +115,35 @@ module editor {
             this.sucaibutton.y = 100;
             this.sucaibutton.height = 30;
             this.sucaibutton.width = 60;
-            this.addChild(this.sucaibutton);
-
+            this.addChild(this.sucaibutton);            
+            
             var savebutton = new render.Bitmap();
             savebutton.source = "save.png"
             savebutton.height = 50;
             savebutton.x = 0;
             savebutton.y = 380;
             this.addChild(savebutton);
-
+            
             var undobutton = new render.Bitmap();
             undobutton.source = "backout.png"
             undobutton.height = 50;
             undobutton.x = 0;
             undobutton.y = 420;
             this.addChild(undobutton);
-
+            
             eventCore.register(savebutton, events.displayObjectRectHitTest, Save);
-
-
-            function Save(save: ui.Button) {
+            
+            
+            function Save(save:ui.Button) {
                 storage.saveFile();
                 alert("保存成功");
             }
-
+            
             eventCore.register(undobutton, events.displayObjectRectHitTest, Undo);
-
-
-            function Undo(back: ui.Button) {
-                if (invoke.canUndo()) {
+            
+            
+            function Undo(back:ui.Button) {
+               if (invoke.canUndo()) {
                     invoke.undo();
                 } else {
                     alert("已无可撤销指令");
@@ -160,15 +160,15 @@ module editor {
                     var tile;
                     tile = mapEditor.children[y * mapData[0].length + x];
                     console.log(tile);
-                    var cbc = new Cmd.CommandButtonClick(this.button, this.TXsource, this.TXwalkable, this.TXnum, this.sucaibutton, tile);
-                    cbc.getPara(x, y, textureData[y][x], mapData[y][x], this.button.background.color, this.button.text, this.TXsource[0], this.TXwalkable[0], this.TXnum[0], this.sucaibutton.text, this.sucaibutton.background.color, tile.source, mapData[y][x]);
+                    var cbc = new Cmd.CommandButtonClick(this.button,this.TXsource,this.TXwalkable,this.TXnum,this.sucaibutton,tile);
+                    cbc.getPara(x,y,textureData[y][x],mapData[y][x],this.button.background.color,this.button.text,this.TXsource[0],this.TXwalkable[0],this.TXnum[0],this.sucaibutton.text,this.sucaibutton.background.color,tile.source,mapData[y][x]);
                     invoke.setCommand(cbc);
-
+                    
                     if (tile.walkable) {//网格可走->网格不可走
                         this.button.background.color = "#FF0000";
                         tile.source = texture[13];//"TX-water.png";            
                         this.button.text = "否";
-
+                        
                         textureData[y][x] = 13;
                         mapData[y][x] = 0;
                     }
@@ -176,17 +176,17 @@ module editor {
                         this.button.background.color = "#0000FF";
                         tile.source = texture[14];//"TX-ground.png";
                         this.button.text = "是";
-
+                        
                         textureData[y][x] = 14;
                         mapData[y][x] = 1;
                     }
-
+                    
                     tile.setWalkable(mapData[y][x]);
-
+                    
                     this.TXsource[0] = tile.source;
                     this.TXwalkable[0] = tile.walkable;
                     this.TXnum[0] = tile.sourceNum;
-
+                    
                     this.sucaibutton.text = tile.source.substring(3, tile.source.length - 4);
                     //地图网格可走性变化需对用户所选素材相关信息进行变化
                     
@@ -196,7 +196,7 @@ module editor {
                     } else {
                         this.sucaibutton.background.color = "#FF0000";
                     }
-                } else {
+                }else{
                     alert("未选可编辑地图区域");//若用户未选中地图网格
                 }
             }
@@ -212,37 +212,48 @@ module editor {
                         var tile;
                         tile = mapEditor.children[y * mapData[0].length + x];
                         console.log(tile.length);
-
+                        
                         var csbc = new Cmd.CommandSucaiButtonClick(this.sucaibutton, tile);
-                        csbc.getPara(x, y, textureData[y][x], mapData[y][x], this.sucaibutton.background.color, tile.source, tile.sourceNum);
+                        csbc.getPara(x,y,textureData[y][x],mapData[y][x],this.sucaibutton.background.color, tile.source,tile.sourceNum);
                         invoke.setCommand(csbc);
-
+                        
                         tile.source = this.TXsource[0];//赋素材
                         tile.sourceNum = this.TXnum[0];
                         textureData[y][x] = tile.sourceNum;
-
-
-                        switch (tile.source) {
-                            case "TX-key.png":
-                                mapData[y][x] = 9;
-                                break;
-                            case "TX-box1.3.png":
-                                mapData[y][x] = 11;
-                                break;
-                            case "TX-box1.1.png":
-                                mapData[y][x] = 12;
-                                break;
-                            case "TX-box2.1.png":
-                                mapData[y][x] = 12;
-                                break;
-                            default:
-                                if (tile.walkable) {
+                        
+                        
+                        if(tile.source == "TX-key.png"){
+                            mapData[y][x] = 9;
+                        }else if(tile.source == "TX-box1.3.png"||tile.source == "TX-box2.3.png"){
+                            mapData[y][x] = 11;
+                        }else if(tile.source == "TX-box1.1.png"||tile.source == "TX-box2.1.png"){
+                            mapData[y][x] = 12;
+                        }else{
+                            if (tile.walkable) {
                                     mapData[y][x] = 1;
                                 } else {
                                     mapData[y][x] = 0;
                                 }
-                                break;
                         }
+                        
+                        // switch (tile.source) {
+                        //     case "TX-key.png":
+                        //         mapData[y][x] = 9;
+                        //         break;
+                        //     case "TX-box1.3.png":
+                        //         mapData[y][x] = 11;
+                        //         break;
+                        //     case "TX-box1.1.png":
+                        //         mapData[y][x] = 12;
+                        //         break;
+                        //     default:
+                        //         if (tile.walkable) {
+                        //             mapData[y][x] = 1;
+                        //         } else {
+                        //             mapData[y][x] = 0;
+                        //         }
+                        //         break;
+                        // }
 
                         if (tile.source == this.TXsource[0]) {//赋素材按钮变化
                             this.sucaibutton.background.color = "#0000FF";
