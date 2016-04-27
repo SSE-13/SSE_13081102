@@ -39,7 +39,6 @@ function TXEditor() {//素材网格加载
     var sucaiCount = texture.length;//素材总数
     var TXcols = 4;
     var TXrows = sucaiCount / TXcols;//5;
-    //var unWalkableTXCount = 14;//不可走的素材个数
     
     var count = 0;//已添加的素材个数
 
@@ -51,7 +50,7 @@ function TXEditor() {//素材网格加载
                     var num = 4 * row + col;
                     tile.sourceNum = num;
                     tile.source = texture[tile.sourceNum];
-                    if (num != 12 && num !=13){//> unWalkableTXCount-1) {
+                    if (num != 12 && num !=13){//只有wall和water不可走
                         tile.walkable = true;
                     } else {
                         tile.walkable = false;
@@ -157,7 +156,7 @@ var texture = ["TX-box1.1.png","TX-box1.2.png","TX-box1.3.png",
 "TX-box1.4.png","TX-box2.1.png","TX-box2.2.png","TX-box2.3.png",
 "TX-box2.4.png","TX-box3.1.png","TX-box3.2.png","TX-box3.3.png",
 "TX-box3.4.png","TX-wall.png","TX-water.png",
-"TX-ground.png","TX-key.png","TX-birdge.png"];
+"TX-ground.png","TX-key.png","TX-bridge.png"];
 
 var storage = data.Storage.getInstance();
 storage.readFile();

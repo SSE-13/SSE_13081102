@@ -230,30 +230,11 @@ module editor {
                             mapData[y][x] = 12;
                         }else{
                             if (tile.walkable) {
-                                    mapData[y][x] = 1;
-                                } else {
-                                    mapData[y][x] = 0;
-                                }
+                                mapData[y][x] = 1;
+                            } else {
+                                mapData[y][x] = 0;
+                            }
                         }
-                        
-                        // switch (tile.source) {
-                        //     case "TX-key.png":
-                        //         mapData[y][x] = 9;
-                        //         break;
-                        //     case "TX-box1.3.png":
-                        //         mapData[y][x] = 11;
-                        //         break;
-                        //     case "TX-box1.1.png":
-                        //         mapData[y][x] = 12;
-                        //         break;
-                        //     default:
-                        //         if (tile.walkable) {
-                        //             mapData[y][x] = 1;
-                        //         } else {
-                        //             mapData[y][x] = 0;
-                        //         }
-                        //         break;
-                        // }
 
                         if (tile.source == this.TXsource[0]) {//赋素材按钮变化
                             this.sucaibutton.background.color = "#0000FF";
