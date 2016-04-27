@@ -10,6 +10,10 @@ var data;
             }
             return Storage._instance;
         };
+        /**
+         * 此函数需要一个函数参数callback,并在此函数内部调用它，以达到读取完数据再创建地图的效果
+         * 防止json数据没读取完就创建地图，此时参数为空
+         */
         Storage.prototype.createXMLHttpRequest = function (callback) {
             var _this = this;
             var xmlHttp;
@@ -30,7 +34,7 @@ var data;
                     _this._mapTexture = mapData.texture;
                     //   alert(mapData.map);     
                     //   alert(mapData.texture); 
-                    callback(); //??
+                    callback();
                 }
             };
         };

@@ -9,7 +9,6 @@ var game;
     game.GRID_PIXEL_HEIGHT = 40;
     var WorldMap = (function (_super) {
         __extends(WorldMap, _super);
-        //  public _tile:game.Tile;
         function WorldMap(pmapData) {
             _super.call(this);
             this.isDirty = true;
@@ -28,6 +27,12 @@ var game;
                     if (this._mapData[i][j] == 9) {
                         grid.getNode(j, i).isKey = true;
                     }
+                    if (this._mapData[i][j] == 11) {
+                        grid.getNode(j, i).isPumpkinClose = true;
+                    }
+                    if (this._mapData[i][j] == 12) {
+                        grid.getNode(j, i).pumpkinLevel2 = true;
+                    }
                 }
             }
             //       grid.setWalkable(5, 0, false);
@@ -39,7 +44,7 @@ var game;
     }(render.DisplayObjectContainer));
     game.WorldMap = WorldMap;
     /*
-    判断点击用
+    判断点击和添加贴图用
     */
     var Tile = (function (_super) {
         __extends(Tile, _super);
@@ -75,16 +80,12 @@ var game;
             this.width = game.GRID_PIXEL_WIDTH;
             this.height = game.GRID_PIXEL_HEIGHT;
             this.steps = 1;
-            this.startX = 0;
-            this.startY = 0;
+            this.startX = 1;
+            this.startY = 1;
             //   canClick: Boolean = true;//防止未到达终点时点击其他地方出现按的卡顿现象
             this.isGetKey = false;
         }
-        // public upDateMap(_map: game.WorldMap) {
-        //     _map = body.map;
-        // }
         BoyBehaviour.prototype.run = function (grid, row, col) {
-            //           setInterval(this.upDateMap(tile), 1000 / 60);//间隔一定时间调用
             if (grid.getWalkable(col, row)) {
                 grid.setStartNode(this.startX, this.startY);
                 grid.setEndNode(col, row);
@@ -102,17 +103,6 @@ var game;
                 console.log(grid.getWalkable(col, row));
                 console.log("此处不可走");
             }
-            //console.log(result);
-            //console.log(this.path.length);
-            // grid.setStartNode(0, 0);//????
-            // this.x = grid.startNode.x * this.width; //起始坐标
-            // this.y = grid.startNode.y * this.height;
-            // grid.setEndNode(x, y);
-            // var findpath = new astar.AStar();
-            // findpath.setHeurisitic(findpath.diagonal);
-            // var result = findpath.findPath(grid);
-            // this.path = findpath._path;
-            // console.log(this.path);
             // console.log(grid.toString());
         };
         BoyBehaviour.prototype.onTicker = function (duringTime) {
@@ -144,36 +134,116 @@ var game;
                              * 新建替换贴图
                              */
                             var newTile;
-                            newTile = new game.Tile("TX-wall.png");
+                            newTile = new game.Tile("TX-ground.png");
                             newTile.x = targetx;
                             newTile.y = targety;
                             newTile.ownedCol = targetx / this.width;
                             newTile.ownedRow = targety / this.height;
                             newTile.width = game.GRID_PIXEL_WIDTH;
                             newTile.height = game.GRID_PIXEL_HEIGHT;
-                            /**
-                             * 新建人物
-                             */
-                            var boyShape = new game.BoyShape();
-                            boyShape.role.x = targetx;
-                            boyShape.role.y = targety;
-                            var body = new game.BoyBehaviour(boyShape);
-                            var ticker = new Ticker();
-                            var stage = new render.DisplayObjectContainer();
                             this.map.addChild(newTile);
-                            for (var i = 0; i < 16; i++) {
-                                //this.map.getChild(i);
-                                eventCore.register(this.map.getChild(i), events.displayObjectRectHitTest, function onTileClick(_tile) {
-                                    body.run(this.map.grid, _tile.ownedRow, _tile.ownedCol);
-                                });
+                        }
+                        if (targetNode.isPumpkinClose && this.isGetKey) {
+                            targetNode.isPumpkinClose = false;
+                            astar.Node.isPumpkinOpen = true;
+                            for (var i = 0; i < 4; i++) {
+                                var newTile;
+                                switch (i) {
+                                    case 0:
+                                        newTile = new game.Tile("TX-box2.1.png");
+                                        newTile.x = targetx;
+                                        newTile.y = targety - game.GRID_PIXEL_HEIGHT;
+                                        newTile.ownedCol = newTile.x / this.width;
+                                        newTile.ownedRow = newTile.y / this.height;
+                                        newTile.width = game.GRID_PIXEL_WIDTH;
+                                        newTile.height = game.GRID_PIXEL_HEIGHT;
+                                        this.map.addChild(newTile);
+                                        break;
+                                    case 1:
+                                        newTile = new game.Tile("TX-box2.2.png");
+                                        newTile.x = targetx + game.GRID_PIXEL_WIDTH;
+                                        newTile.y = targety - game.GRID_PIXEL_HEIGHT;
+                                        newTile.ownedCol = newTile.x / this.width;
+                                        newTile.ownedRow = newTile.y / this.height;
+                                        newTile.width = game.GRID_PIXEL_WIDTH;
+                                        newTile.height = game.GRID_PIXEL_HEIGHT;
+                                        this.map.addChild(newTile);
+                                        break;
+                                    case 2:
+                                        newTile = new game.Tile("TX-box2.3.png");
+                                        newTile.x = targetx;
+                                        newTile.y = targety;
+                                        newTile.ownedCol = targetx / this.width;
+                                        newTile.ownedRow = targety / this.height;
+                                        newTile.width = game.GRID_PIXEL_WIDTH;
+                                        newTile.height = game.GRID_PIXEL_HEIGHT;
+                                        this.map.addChild(newTile);
+                                        break;
+                                    case 3:
+                                        newTile = new game.Tile("TX-box2.4.png");
+                                        newTile.x = targetx + game.GRID_PIXEL_WIDTH;
+                                        newTile.y = targety;
+                                        newTile.ownedCol = newTile.x / this.width;
+                                        newTile.ownedRow = newTile.y / this.height;
+                                        newTile.width = game.GRID_PIXEL_WIDTH;
+                                        newTile.height = game.GRID_PIXEL_HEIGHT;
+                                        this.map.addChild(newTile);
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
-                            stage.addChild(this.map);
-                            body.map = this.map;
-                            stage.addChild(boyShape);
-                            ticker.start([body]);
-                            ticker.onTicker();
-                            console.log("a");
-                            renderCore.start(stage, []);
+                        }
+                        if (astar.Node.isPumpkinOpen && targetNode.pumpkinLevel2) {
+                            astar.Node.isPumpkinOpen = false;
+                            for (var i = 0; i < 4; i++) {
+                                var newTile;
+                                switch (i) {
+                                    case 0:
+                                        newTile = new game.Tile("TX-box3.1.png");
+                                        newTile.x = targetx;
+                                        newTile.y = targety;
+                                        newTile.ownedCol = newTile.x / this.width;
+                                        newTile.ownedRow = newTile.y / this.height;
+                                        newTile.width = game.GRID_PIXEL_WIDTH;
+                                        newTile.height = game.GRID_PIXEL_HEIGHT;
+                                        this.map.addChild(newTile);
+                                        //  console.log("0");
+                                        break;
+                                    case 1:
+                                        newTile = new game.Tile("TX-box3.2.png");
+                                        newTile.x = targetx + game.GRID_PIXEL_WIDTH;
+                                        newTile.y = targety;
+                                        newTile.ownedCol = newTile.x / this.width;
+                                        newTile.ownedRow = newTile.y / this.height;
+                                        newTile.width = game.GRID_PIXEL_WIDTH;
+                                        newTile.height = game.GRID_PIXEL_HEIGHT;
+                                        this.map.addChild(newTile);
+                                        break;
+                                    case 2:
+                                        newTile = new game.Tile("TX-box3.3.png");
+                                        newTile.x = targetx;
+                                        newTile.y = targety + game.GRID_PIXEL_HEIGHT;
+                                        newTile.ownedCol = targetx / this.width;
+                                        newTile.ownedRow = targety / this.height;
+                                        newTile.width = game.GRID_PIXEL_WIDTH;
+                                        newTile.height = game.GRID_PIXEL_HEIGHT;
+                                        this.map.addChild(newTile);
+                                        break;
+                                    case 3:
+                                        newTile = new game.Tile("TX-box3.4.png");
+                                        newTile.x = targetx + game.GRID_PIXEL_WIDTH;
+                                        newTile.y = targety + game.GRID_PIXEL_HEIGHT;
+                                        newTile.ownedCol = newTile.x / this.width;
+                                        newTile.ownedRow = newTile.y / this.height;
+                                        newTile.width = game.GRID_PIXEL_WIDTH;
+                                        newTile.height = game.GRID_PIXEL_HEIGHT;
+                                        this.map.addChild(newTile);
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
                         }
                         if (this.steps == this.path.length - 1) {
                             this.steps = 1;

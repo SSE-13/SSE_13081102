@@ -14,11 +14,16 @@ module astar {
         visited: Boolean = false;
         inPath: Boolean = false;
         isKey :Boolean;
-
+        isPumpkinClose :Boolean;//记录南瓜是否为第一状态，用于标记切换第一状态到第二状态的图片，若变成第二状态，则为false
+        static isPumpkinOpen :Boolean;//记录是否有宝石，用于标记切换第二状态到第三状态的图片，若变成第三状态，则为false
+        pumpkinLevel2 :Boolean;
         constructor(x: number, y: number) {
             this.x = x;
             this.y = y;
             this.isKey = false;
+            this.isPumpkinClose = false;
+            astar.Node.isPumpkinOpen = false;
+            this.pumpkinLevel2 = false;
         }
 
         toString() {

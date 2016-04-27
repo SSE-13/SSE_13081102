@@ -9,6 +9,9 @@ var astar;
             this.x = x;
             this.y = y;
             this.isKey = false;
+            this.isPumpkinClose = false;
+            astar.Node.isPumpkinOpen = false;
+            this.pumpkinLevel2 = false;
         }
         Node.prototype.toString = function () {
             if (this.inPath) {

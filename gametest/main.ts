@@ -10,7 +10,7 @@ function createMap(pMapData, pmapTexture) {
     for (var col = 0; col < cols; col++) {
         for (var row = 0; row < rows; row++) {
             var _tile;
-            /*      switch (pmapTexture[row][col]) {
+                  switch (pmapTexture[row][col]) {
                       case 0:
                           _tile = new game.Tile("TX-box1.1.png");
                           break;
@@ -51,13 +51,13 @@ function createMap(pMapData, pmapTexture) {
                           _tile = new game.Tile("TX-wall.png");
                           break;
                       case 13:
-                          _tile = new game.Tile("TX-water.png");
+                          _tile = new game.Tile("TX-ground.png");
                           break;
                       case 14:
                           _tile = new game.Tile("TX-grass.png");
                           break;
                       case 15:
-                          _tile = new game.Tile("TX-ground.png");
+                          _tile = new game.Tile("TX-water.png");
                           break;
                       case 16:
                           _tile = new game.Tile("TX-key.png");
@@ -71,17 +71,17 @@ function createMap(pMapData, pmapTexture) {
                           break;
                       default:
                           break;
-                  }*/
+                  }
 
-            if (pMapData[row][col] == 9) {
-                _tile = new game.Tile("TX-key.png");
-                _tile.isKey = true;
-                console.log("key");
-            } else if (map.grid.getWalkable(col, row)) {
-                _tile = new game.Tile("TX-ground.png");
-            } else {
-                _tile = new game.Tile("TX-wall.png");         
-            }
+            // if (pMapData[row][col] == 9) {
+            //     _tile = new game.Tile("TX-key.png");
+            //     _tile.isKey = true;
+            //     console.log("key");
+            // } else if (map.grid.getWalkable(col, row)) {
+            //     _tile = new game.Tile("TX-ground.png");
+            // } else {
+            //     _tile = new game.Tile("TX-wall.png");         
+            // }
 
             _tile.x = col * game.GRID_PIXEL_WIDTH;
             _tile.y = row * game.GRID_PIXEL_HEIGHT
@@ -91,7 +91,7 @@ function createMap(pMapData, pmapTexture) {
             _tile.height = game.GRID_PIXEL_HEIGHT;
             map.addChild(_tile);
 
-            eventCore.register(_tile, events.displayObjectRectHitTest, onTileClick);//为什么先addChild,再注册点击事件？
+            eventCore.register(_tile, events.displayObjectRectHitTest, onTileClick);
         }
     }
     return map;
@@ -111,6 +111,9 @@ eventCore.init();
 
 
 var boyShape = new game.BoyShape();
+
+boyShape.x=40;
+boyShape.y=40;//= =！ 不管用
 var body = new game.BoyBehaviour(boyShape);
 
 var ticker = new Ticker();
@@ -126,10 +129,11 @@ var onLoadMapDataSuccess = () => {
     stage.addChild(boyShape);
     ticker.start([body]);
     ticker.onTicker();
+    //renderCore.start只能用一次
     renderCore.start(stage, ["TX-box.png", "TX-box1.1.png", "TX-box1.2.png", "TX-box1.3.png", "TX-box1.4.png", "TX-box2.1.png", "TX-box2.2.png", "TX-box2.3.png", "TX-box2.4.png",
         "TX-box3.1.png", "TX-box3.2.png", "TX-box3.3.png", "TX-box3.4.png", "TX-wall.png",
         "TX-water.png", "TX-grass.png", "TX-ground.png", "TX-key.png", "TX-role.png", "TX-stone.png", "TX-birdge.png"]);
-    //renderCore.start(stage, []);
+       
 }
 
 storage.createXMLHttpRequest(onLoadMapDataSuccess);

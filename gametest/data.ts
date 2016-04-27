@@ -13,7 +13,10 @@ module data {
             }
             return Storage._instance;
         }
-
+/**
+ * 此函数需要一个函数参数callback,并在此函数内部调用它，以达到读取完数据再创建地图的效果
+ * 防止json数据没读取完就创建地图，此时参数为空
+ */
         public createXMLHttpRequest(callback) {
             var xmlHttp;
             xmlHttp = new XMLHttpRequest();
@@ -34,50 +37,11 @@ module data {
                     this._mapTexture = mapData.texture; 
                     //   alert(mapData.map);     
                     //   alert(mapData.texture); 
-                    callback();//??
+                    callback();
 
                 }
 
             }
         }
-        /*    public readFile() {
-           var map_path = __dirname + "/map.json"
-           var content = fs.readFileSync(map_path, "utf-8");
-           var obj = JSON.parse(content);
-           this.mapData = obj.map;
-       }
-   }
-   */
     }
-   
-
-    /*
-      创建xml请求
-      
-      export class createXMLHttpRequest {
-          public xmlHttp: XMLHttpRequest;
-          constructor() {
-              this.xmlHttp = new XMLHttpRequest();
-              try {
-                  this.xmlHttp.onreadystatechange = handleStateChange;
-                  this.xmlHttp.open("GET", "Json.txt", true);
-                  this.xmlHttp.send(null);
-              }
-              catch (exception) {
-                  alert("xmlHttp Fail");
-              }
-          }
-          handleStateChange() {
-              if (this.xmlHttp.readyState == 4) {
-                  if (this.xmlHttp.status == 200 || this.xmlHttp.status == 0) {
-                      var result = this.xmlHttp.responseText;
-                      var json = eval("(" + result + ")");
-                      alert(json.programmers[0].firstName);//读取json数据
-                      //alert(json.sex);
-                  }
-              }
-          }
-      }
-      */
-
 }
